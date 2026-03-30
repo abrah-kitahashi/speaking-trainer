@@ -939,6 +939,996 @@ const TOPICS = [
         grammar_tip: 'Even if S 過去形, S would 〜 は仮定法過去のパターン。最悪のシナリオを想定しながらも自社の強みを示す「それでも大丈夫」という構文。ピッチで説得力が増す。'
       }
     ]
+  },
+  {
+    id: 'blend',
+    label: 'BLEND Localization（US）',
+    steps: [
+      {
+        grammar: 'used to be（変化）',
+        jp: 'BLENDってもともと「OneHourTranslation」っていう名前だったんですけど、2021年にリブランドして、今はAI活用型の中堅ローカライズ会社として知られてるんですよ。',
+        hint: '会社の背景と現在の立ち位置をシンプルに伝えましょう。',
+        context: 'BLENDを同僚に初めて紹介している場面',
+        model: 'BLEND used to be called OneHourTranslation, but they rebranded in 2021 and now operate as an AI-native, mid-market localization company.',
+        vocab: [
+          { term: 'AI-native', desc: '「はじめからAIありきで設計された」。AI-driven より「最初からAI前提」というニュアンスが強い。' },
+          { term: 'mid-market', desc: '「中堅市場向け」。大手（enterprise）と小規模（SMB）の中間層を指す。' }
+        ],
+        grammar_tip: 'used to be ~ は「かつて〜だった（今は違う）」を表す過去の状態。but now ... でコントラストをつけると変化が明確に伝わる。'
+      },
+      {
+        grammar: '現在完了形',
+        jp: 'BLEND Voiceっていう音声部門を立ち上げて、ゲームやeコマース分野での実績を積み上げてきてるんですよね。',
+        hint: '成長の積み重ねを現在完了で表現しましょう。',
+        context: 'BLENDの事業展開を説明している場面',
+        model: "They've built up a solid track record in gaming and eCommerce, and launched a dedicated voice division called BLEND Voice.",
+        vocab: [
+          { term: 'built up a track record', desc: '「実績を積み上げてきた」。現在完了でプロセスの継続を表す。' },
+          { term: 'dedicated', desc: '「専門の・特化した」。separate より「そのためだけに設けられた」というニュアンス。' }
+        ],
+        grammar_tip: "have built up ~ は現在完了で「積み上げてきた」というプロセスを表す。They've = They have の短縮形。"
+      },
+      {
+        grammar: '動名詞主語',
+        jp: 'エンタープライズ向けとSMB向けを両方カバーするって、BLENDのような中堅プレイヤーにとってはすごく難しいバランスなんですよね。',
+        hint: '「〜すること」を動名詞で主語にして分析を伝えましょう。',
+        context: 'BLENDのビジネスモデルの課題を分析している場面',
+        model: 'Serving both enterprise and SMB clients is a tough balancing act for a mid-market player like BLEND.',
+        vocab: [
+          { term: 'Serving both A and B', desc: '「AとB両方にサービスを提供すること」。動名詞が主語になるパターン。' },
+          { term: 'balancing act', desc: '「バランスをとる行為・難しい両立」。複数の要求を同時に満たす難しさを表す慣用句。' }
+        ],
+        grammar_tip: '動名詞（Ving）を主語にする構文。Serving ~ is ... で「〜すること（へのサービス提供）は〜だ」という分析的な表現ができる。'
+      },
+      {
+        grammar: '関係副詞 how',
+        jp: 'BLENDがAPIファーストで開発者に選ばれている仕組みって、うちがパブリッシャーとの関係を構築していく上でも参考になりますよね。',
+        hint: '「どのように〜しているか」を関係副詞 how で表現しましょう。',
+        context: '競合から学べることを議論している場面',
+        model: 'How BLEND has positioned itself for tech clients through API-first delivery is actually instructive for how we build relationships with publishers.',
+        vocab: [
+          { term: 'positioned itself for ~', desc: '「〜向けにポジショニングしてきた」。自社の立ち位置を意図的に作ってきたニュアンス。' },
+          { term: 'instructive', desc: '「参考になる・示唆に富む」。useful よりもフォーマルで分析的なニュアンス。' }
+        ],
+        grammar_tip: 'How SV is instructive for ~ は「SVがどうやって〜しているかが〜の参考になる」という構文。How を名詞節として使うパターン。'
+      },
+      {
+        grammar: 'nothing主語',
+        jp: 'BLENDにはマンガや小説のローカライズの実績が全くなくて、エンタメ分野での信頼性という意味ではゼロからのスタートなんですよね。',
+        hint: '「何も〜ない」という nothing 主語で実績のなさを明確に表現しましょう。',
+        context: 'BLENDのエンタメ分野での限界を分析している場面',
+        model: "Nothing in BLEND's portfolio suggests experience with manga or literary localization — they're starting from zero in terms of entertainment credibility.",
+        vocab: [
+          { term: 'Nothing in ~ suggests ~', desc: '「〜の中で〜を示すものは何もない」。実績がないことを明確に伝える表現。' },
+          { term: 'starting from zero', desc: '「ゼロからのスタート」。no track record よりも率直で口語的。' }
+        ],
+        grammar_tip: 'Nothing in A suggests B は「Aの中にBを示すものは何もない」という構文。批判的な分析をするときに役立つパターン。'
+      }
+    ]
+  },
+  {
+    id: 'propio',
+    label: 'Propio Language Services（US）',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'Propioって、医療通訳を中心に急成長してる会社で、2025年には世界5位にランクインしてるんですよ。',
+        hint: 'Propioの立ち位置をシンプルに伝えましょう。',
+        context: 'Propioを同僚に初めて紹介している場面',
+        model: 'Propio is a rapidly growing language services company focused primarily on healthcare interpretation, and they actually ranked fifth globally in 2025.',
+        vocab: [
+          { term: 'focused primarily on ~', desc: '「主に〜に集中している」。mainly oriented toward と同義だが focused が自然。' },
+          { term: 'ranked fifth globally', desc: '「世界5位にランクインしている」。industry rank を伝える定番表現。' }
+        ],
+        grammar_tip: '現在形で会社の現在の状態を簡潔に説明するパターン。actually を入れると「意外と凄い」という驚きのニュアンスが出る。'
+      },
+      {
+        grammar: '現在完了形',
+        jp: '2024年だけでAkorbi、ULG、Telelanguageなど4社を買収して、一気に規模を拡大してきたんですよ。',
+        hint: '買収による急成長を現在完了で表現しましょう。',
+        context: 'Propioの成長戦略を説明している場面',
+        model: "They've made four major acquisitions in 2024 alone — Akorbi, ULG, Telelanguage, and ASL Services — and scaled up incredibly fast.",
+        vocab: [
+          { term: 'four major acquisitions', desc: '「4件の主要買収」。買収件数で成長速度を表現。' },
+          { term: 'scaled up incredibly fast', desc: '「信じられないほど急速にスケールアップした」。grow rapidly より口語的で勢いが伝わる。' }
+        ],
+        grammar_tip: "have made ~ in A alone は「Aだけで〜をした」という強調表現。They've = They have の短縮形。"
+      },
+      {
+        grammar: 'so that SV（目的）',
+        jp: 'PropioがM&Aを重ねてるのは、医療分野でワンストップサービスを提供できるようにするためなんですよね。',
+        hint: '「〜できるように〜している」という目的の表現を使いましょう。',
+        context: 'Propioの買収戦略の目的を分析している場面',
+        model: "Propio keeps acquiring companies so that they can offer a complete one-stop-shop for healthcare clients — interpretation, translation, and multimedia all under one roof.",
+        vocab: [
+          { term: 'one-stop-shop', desc: '「一か所で全部揃う・ワンストップサービス」。B2Bでよく使われる業界定番表現。' },
+          { term: 'under one roof', desc: '「一つの屋根の下で＝同一の会社・プラットフォームで」という慣用句。' }
+        ],
+        grammar_tip: 'so that SV で目的を表す。keeps acquiring ... so that they can ... で「〜できるように〜し続けている」というパターン。'
+      },
+      {
+        grammar: '間接疑問文',
+        jp: 'Propioが今後マルチメディアやエンタメ分野にどこまで踏み込んでくるかは、まだ不透明ですね。',
+        hint: '「どこまで〜するか」という間接疑問文で将来の不確実性を表現しましょう。',
+        context: 'Propioの将来動向を分析している場面',
+        model: "It's still unclear how far Propio will push into multimedia and entertainment — their current footprint there is mostly corporate-grade at best.",
+        vocab: [
+          { term: "It's still unclear how far ~", desc: '「〜がどこまで進むか依然不明」。間接疑問文を使った不確実性の表現。' },
+          { term: 'corporate-grade', desc: '「企業向けグレード」。エンタメ・出版と対比して「業務用途レベル」を指す。' }
+        ],
+        grammar_tip: 'how far SV will ~ という間接疑問文。It is unclear how SV という形で不確実性を伝えるときに使う。'
+      },
+      {
+        grammar: 'not as...as',
+        jp: 'Propioのマルチメディア部門って、自社サイトでは大きく打ち出してるけど、IyunoやBLENDのエンタメ実績にはとても及ばないですよね。',
+        hint: '「〜ほど〜ではない」という比較否定で実力差を表現しましょう。',
+        context: 'Propioのマルチメディア能力を客観的に評価している場面',
+        model: "Propio's multimedia offering isn't nearly as established as Iyuno's or even BLEND's — it's mostly inherited capabilities from acquisitions, not a real strategic focus.",
+        vocab: [
+          { term: "isn't nearly as established as ~", desc: '「〜ほど確立されていない」。not as ~ as の強調形で nearly を加える。' },
+          { term: 'inherited capabilities', desc: '「買収によって引き継いだ能力」。自社で育てたものではないというニュアンス。' }
+        ],
+        grammar_tip: 'not nearly as ~ as は「〜ほど〜ではない」という比較否定の強調形。nearly を入れることで「差が大きい」ことが伝わる。'
+      }
+    ]
+  },
+  {
+    id: 'deden',
+    label: 'DEDEN・DADANとは',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'DEDENって、GREEグループのDADAN社が作ったマンガ電子書籍の制作・流通ツールなんですよ。翻訳会社じゃなくてSaaSプラットフォームです。',
+        hint: 'DEDENを端的に定義しましょう。',
+        context: 'DEDENについて初めて聞いた同僚に説明している場面',
+        model: "DEDEN is a cloud-based e-book operations platform developed by DADAN Inc., a subsidiary of GREE Group — it's a SaaS tool, not a localization vendor.",
+        vocab: [
+          { term: 'cloud-based platform', desc: '「クラウドベースのプラットフォーム」。SaaS製品を説明するときの定番表現。' },
+          { term: 'subsidiary of ~', desc: '「〜の子会社」。division（部門）とは違い、法的に独立した子会社を指す。' }
+        ],
+        grammar_tip: "「AはBではなくCだ」という定義文。it's a SaaS tool, not a localization vendor のように対比で明確にするパターン。"
+      },
+      {
+        grammar: '関係代名詞 what（主格）',
+        jp: 'DEDENが実際にやってるのは、EPUBの制作やファイル管理、マンガの翻訳ワークフローの管理であって、翻訳そのものじゃないんですよ。',
+        hint: '関係代名詞 what で「DEDENが実際にやっていること」を明確にしましょう。',
+        context: 'DEDENの機能を詳しく説明している場面',
+        model: "What DEDEN actually does is manage EPUB production, file handling, and translation workflows — not produce translations itself.",
+        vocab: [
+          { term: 'EPUB production', desc: '「電子書籍EPUBの制作」。出版・デジタル書籍業界の専門用語。' },
+          { term: 'translation workflows', desc: '「翻訳のワークフロー（作業フロー）管理」。翻訳作業のプロセス管理を指す。' }
+        ],
+        grammar_tip: 'What SV does is ~ は「SVが実際にやっていることは〜だ」という強調構文。what の主格用法で核心を明確にする。'
+      },
+      {
+        grammar: 'so that SV（目的）',
+        jp: 'うちもDEDENみたいなツールを使えば、制作フローを効率化できるんですよね。MantraEngineと組み合わせることで、より速くデリバリーができる。',
+        hint: '「〜できるように〜を使う」という目的の表現を使いましょう。',
+        context: 'DEDENを自社のワークフローに活用する場面を説明している',
+        model: "We could integrate tools like DEDEN into our pipeline so that production flows more smoothly alongside Mantra Engine.",
+        vocab: [
+          { term: 'integrate ~ into our pipeline', desc: '「〜をパイプライン・ワークフローに組み込む」。incorporate よりエンジニアリング・業務寄りの表現。' },
+          { term: 'flows more smoothly', desc: '「より滑らかに進む」。production efficiency を表す口語的な表現。' }
+        ],
+        grammar_tip: 'so that SV で目的を表す。integrate A so that B flows は「Bがうまく流れるようにAを組み込む」というパターン。'
+      },
+      {
+        grammar: 'not as...as',
+        jp: 'DEDENはワークフロー管理ツールとしては優秀ですが、文化的な判断とか編集品質の面では翻訳サービス会社の域には到底及ばないですよね。',
+        hint: '「〜ほど〜ではない」という比較否定でツールとサービスの違いを説明しましょう。',
+        context: 'DEDENとローカライズサービス会社の役割の違いを説明している場面',
+        model: "DEDEN is great as a workflow tool, but it's not as capable as a full localization service when it comes to cultural judgment or editorial quality.",
+        vocab: [
+          { term: 'not as capable as ~', desc: '「〜ほど高機能・有能ではない」。not as good as よりフォーマルな表現。' },
+          { term: 'when it comes to ~', desc: '「〜に関しては」という口語の定番フレーズ。特定領域に話を絞るときに使う。' }
+        ],
+        grammar_tip: 'not as ~ as は「〜ほど〜ではない」という比較否定の基本形。when it comes to で「特定の領域に限っては」という条件を加えると明確になる。'
+      },
+      {
+        grammar: '仮定法過去',
+        jp: 'もしDEDENを競合として扱ってしまったら、本当にライバルとすべきMediBangやAGMへの分析に注力できなくなってしまいますよね。',
+        hint: '「もし〜してしまったら」という仮定法で誤った認識のリスクを表現しましょう。',
+        context: '戦略的な市場分類の重要性をチームに説明している場面',
+        model: "If we treated DEDEN as a competitor, we'd lose focus on who actually matters — MediBang and AGM are the ones we need to be watching.",
+        vocab: [
+          { term: 'lose focus on ~', desc: '「〜への集中を失う」。take our eye off と同義だが lose focus の方がビジネス表現として直接的。' },
+          { term: 'the ones we need to be watching', desc: '「私たちが注目しなければならない対象」。those を具体的に関係代名詞で限定している。' }
+        ],
+        grammar_tip: 'If S 過去形, S would 動詞原形 は仮定法過去の基本形。現実に反する誤った判断のシナリオを提示するのに使える。'
+      }
+    ]
+  },
+  {
+    id: 'mantra_orange',
+    label: 'Mantra・Orange（AIインフラ）',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'MantraEngineとOrangeのFactoryツールって、どちらも翻訳AIのインフラを提供してる会社で、うちのような翻訳サービス会社のお客さんでもあるんですよ。',
+        hint: 'AIインフラ会社の立ち位置をシンプルに説明しましょう。',
+        context: '社内でAIツールベンダーの役割を整理している場面',
+        model: 'Both Mantra Engine and Orange Factory are AI infrastructure providers — they serve companies like us, not compete with us.',
+        vocab: [
+          { term: 'AI infrastructure providers', desc: '「AIのインフラを提供する会社」。tool vendors とも言い換えられる。' },
+          { term: 'serve companies like us', desc: '「うちのような会社にサービスを提供する」。compete with us との対比が重要。' }
+        ],
+        grammar_tip: 'they serve ~ not compete with ~ というパターンで「サービスを提供する立場と競合する立場の違い」を明確に表現できる。'
+      },
+      {
+        grammar: '対比接続詞 while',
+        jp: 'Mantraみたいなツールは翻訳の効率化を担ってくれるんですけど、文化的なニュアンスとか物語の声感みたいなのは、やっぱり人間じゃないと出せないですよね。',
+        hint: 'AIツールと人間の役割の違いを対比させましょう。',
+        context: 'AIツールの役割と限界をチームで話し合っている場面',
+        model: "While tools like Mantra handle the efficiency side, narrative voice and cultural nuance still need a human touch.",
+        vocab: [
+          { term: 'handle the efficiency side', desc: '「効率化の部分を担う」。deal with より役割分担のニュアンスが明確。' },
+          { term: 'narrative voice', desc: '「物語の語り口・声感」。文学翻訳で重要な「原作の雰囲気やトーン」を指す専門的な表現。' }
+        ],
+        grammar_tip: 'While A handles B, C still needs D. は対比の定番構文。「Aの一方で」という対比が一文でスッキリ伝わる。'
+      },
+      {
+        grammar: '関係代名詞 what（目的格）',
+        jp: 'MantraとOrangeが本当に売ってるのはスピードとコスト削減であって、文化的な判断力とか読者との感情的なつながりじゃないんですよね。',
+        hint: '関係代名詞 what で「ツールが本当に提供するもの」を明確にしましょう。',
+        context: 'AIツールの本質的な価値を分析している場面',
+        model: "What Mantra and Orange are really selling is speed and cost reduction — not cultural judgment or emotional connection with readers.",
+        vocab: [
+          { term: 'emotional connection with readers', desc: '「読者との感情的なつながり」。出版・翻訳業界で価値を語るときのキーフレーズ。' },
+          { term: 'cost reduction', desc: '「コスト削減」。ビジネス文脈で頻出の基本表現。' }
+        ],
+        grammar_tip: "What SV is selling is ~ は「SVが本当に売っているものは〜だ」という強調構文。What を主語にすることで何が重要かを明確に伝えられる。"
+      },
+      {
+        grammar: '反対の最上級否定',
+        jp: 'AIツールに翻訳を全部任せることは、決して簡単な選択じゃないんですよね。品質コントロールが複雑になるし、ブランドボイスを守るのが難しくなる。',
+        hint: '「簡単ではない」という否定的な最上級で複雑さを表現しましょう。',
+        context: 'AI全面依存のリスクをチームに説明している場面',
+        model: "Handing everything to AI tools isn't exactly the easiest path — quality control gets complicated, and protecting brand voice becomes a real challenge.",
+        vocab: [
+          { term: "isn't exactly the easiest", desc: '「決して簡単ではない」という皮肉的な否定表現。反対の最上級を否定してより強く「難しい」ことを伝える。' },
+          { term: 'brand voice', desc: '「ブランドの語り口・トーン」。一貫したコミュニケーションのスタイルを指すマーケティング用語。' }
+        ],
+        grammar_tip: 'not the easiest は「もっとも簡単というわけではない＝決して簡単ではない」という最上級の否定。強い否定をやわらかく伝える口語的テクニック。'
+      },
+      {
+        grammar: '動名詞主語',
+        jp: 'AIインフラツールを賢く使うことで、うちみたいなブティック会社でもコストと品質の両方を改善できるんですよ。',
+        hint: '「〜すること」を動名詞で主語にして戦略的なメリットを伝えましょう。',
+        context: 'AIツール活用の戦略的なメリットを説明している場面',
+        model: "Deploying AI infrastructure tools strategically allows even a boutique shop like ours to improve both cost and quality at the same time.",
+        vocab: [
+          { term: 'Deploying ~ strategically', desc: '「〜を戦略的に活用すること」。動名詞が主語になるパターン。using よりビジネス的。' },
+          { term: 'boutique shop', desc: '「小規模・専門特化の会社」。大手と対比する際の口語的表現。' }
+        ],
+        grammar_tip: '動名詞（Ving）を主語にすると「〜すること」という概念を主語にできる。Deploying ~ allows ... で「〜を活用することが〜を可能にする」という因果関係を表せる。'
+      }
+    ]
+  },
+  {
+    id: 'arc_comms',
+    label: 'Arc Communications',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'Arc Communicationsって、うちと同じLayer 2で競合してる会社なんですけど、MediBangやAGMに比べると規模は小さいんですよね。',
+        hint: 'Arc Communicationsの市場での立ち位置をシンプルに説明しましょう。',
+        context: '競合他社について同僚に説明している場面',
+        model: "Arc Communications competes in the same Layer 2 services space as us, though they're smaller than MediBang or AGM in scale.",
+        vocab: [
+          { term: 'competes in the same ~ space as us', desc: '「うちと同じ〜の領域で競合している」。in the same market as us とも言える。' },
+          { term: "though they're smaller", desc: '「ただし規模は小さい」という譲歩の口語表現。even though より軽いニュアンス。' }
+        ],
+        grammar_tip: '競合の市場ポジションを説明する基本パターン。competes in the same space as ~ で「同じ土俵にいる」ことを伝えられる。'
+      },
+      {
+        grammar: '対比接続詞 while',
+        jp: 'MediBangは量と流通網で勝負しているのに対して、Arc Communicationsはより小規模なクライアントや特定ジャンルに特化してる印象ですね。',
+        hint: '2社のアプローチの違いを対比させましょう。',
+        context: '競合の戦略の違いを分析している場面',
+        model: "While MediBang competes on volume and distribution, Arc Communications seems to focus more on niche clients and specific genres.",
+        vocab: [
+          { term: 'competes on volume', desc: '「量・規模で勝負している」。differentiate through volume と同義だが competes on の方が口語的。' },
+          { term: 'niche clients', desc: '「ニッチな・特定分野に特化したクライアント」。一般的な大手クライアントとの対比。' }
+        ],
+        grammar_tip: 'While A competes on B, C focuses on D. は対比の基本構文。似たような業界の2社を比較するときに使いやすい。'
+      },
+      {
+        grammar: '関係副詞 where（場所以外）',
+        jp: 'うちとArcが本当にぶつかるのは、品質にこだわる出版社や文芸作品を取り扱うクライアントとの取引を奪い合う場面ですね。',
+        hint: '「〜が起きる場面・領域」を関係副詞 where で表現しましょう。',
+        context: '競合との直接的な競争が起きる場面を分析している',
+        model: "Where Arc and we actually compete is in pitches to quality-focused publishers and clients handling literary content.",
+        vocab: [
+          { term: 'pitches to publishers', desc: '「出版社への営業・提案」。pitch は動詞としても名詞としても使える。' },
+          { term: 'literary content', desc: '「文学的なコンテンツ」。マンガや小説など「文芸性のある作品」を指す。' }
+        ],
+        grammar_tip: 'Where A and we actually compete is ~ は関係副詞 where の比喩的用法。「競争が起きる領域・場面」という抽象的な「場所」を表す。'
+      },
+      {
+        grammar: '仮定法過去',
+        jp: 'もしArcがAnimateグループとの関係を持っていたとしたら、もっと手ごわい競合になっていたと思いますよね。今はそこがうちの明確な差別化要素です。',
+        hint: '「もし〜だったら」という仮定法で自社の優位性を際立たせましょう。',
+        context: 'Arcとの差別化要素を投資家に説明している場面',
+        model: "If Arc had the Animate Group relationship, they'd be a much tougher competitor — that connection is honestly our clearest differentiator right now.",
+        vocab: [
+          { term: 'a much tougher competitor', desc: '「はるかに手ごわい競合」。much は比較級を強調する副詞。' },
+          { term: 'clearest differentiator', desc: '「最も明確な差別化要因」。最上級で自社の強みの重要性を強調。' }
+        ],
+        grammar_tip: 'If S had ~, S would be ~ は仮定法過去のパターン。「もし〜だったら」という現実と異なる仮定を通じて自社の優位性を強調できる。'
+      },
+      {
+        grammar: '動名詞主語',
+        jp: 'Layer 2の競合として見ると、ArcとうちってArcがAnimateなしで同じ品質優先市場で戦っているので、差別化を明確にしておく戦略が重要ですよね。',
+        hint: '「〜すること」を動名詞で主語にして戦略の重要性を伝えましょう。',
+        context: 'Arc Communicationsとの競合回避戦略を議論している場面',
+        model: "Competing directly with Arc in the same quality-first space means we need a clear strategy to differentiate — otherwise we're just fighting over the same small pond.",
+        vocab: [
+          { term: 'Competing directly with ~', desc: '「〜と直接競合すること」。動名詞が主語になるパターン。' },
+          { term: 'fighting over the same small pond', desc: '「同じ小さな池を奪い合う」。限られた市場での過当競争を表すビジネス慣用句。' }
+        ],
+        grammar_tip: '動名詞（Ving）を主語にする構文。Competing ~ means we need ~ で「〜することは〜が必要だということを意味する」という論理展開ができる。'
+      }
+    ]
+  },
+  {
+    id: 'lsp_market',
+    label: 'グローバルLSP市場の全体像',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'グローバルの言語サービス市場って、2024年時点で約540億ドル規模で、2030年には720億ドル超えが見込まれてるんですよ。',
+        hint: '市場規模を数字を使ってシンプルに伝えましょう。',
+        context: '市場調査の結果をチームに共有している場面',
+        model: 'The global language services market is valued at around $54 billion in 2024 and is projected to reach over $72 billion by 2030.',
+        vocab: [
+          { term: 'is valued at ~', desc: '「〜の価値・規模と評価されている」。市場規模を伝える定番表現。' },
+          { term: 'is projected to reach ~', desc: '「〜に達すると見込まれている」。将来予測を表すビジネス表現。' }
+        ],
+        grammar_tip: '現在形で市場の現状を伝え、is projected to で将来予測を続けるパターン。数字を使ったファクトベースの説明に最適。'
+      },
+      {
+        grammar: '現在完了進行形',
+        jp: 'AIと機械翻訳の進化で、単純な翻訳作業のマージンがどんどん圧縮されてきていて、差別化がより難しくなってきてるんですよ。',
+        hint: 'AI化による変化を現在完了（進行形）で表現しましょう。',
+        context: 'LSP業界のトレンドを投資家に説明している場面',
+        model: "AI and machine translation have been squeezing margins on high-volume, low-complexity work — and differentiation has become a lot harder.",
+        vocab: [
+          { term: 'squeezing margins', desc: '「マージンを圧縮している」。現在完了進行形で継続的なトレンドを表す。' },
+          { term: 'high-volume, low-complexity work', desc: '「量が多く、難度が低い作業」。コモディティ化しやすい仕事を指す業界表現。' }
+        ],
+        grammar_tip: "have been Ving は現在完了進行形で「ずっと〜し続けている」という継続中のトレンドを表す。業界変化を伝えるときに使いやすい。"
+      },
+      {
+        grammar: '動名詞主語',
+        jp: 'ストリーミング市場が拡大することで、メディアに特化したローカライズの需要が急増してるんですよね。特にLATAMと東南アジアの成長が著しい。',
+        hint: 'ストリーミング拡大という事象を動名詞で主語にして因果関係を説明しましょう。',
+        context: 'ストリーミング市場とローカライズ需要の関係を説明している場面',
+        model: "Expanding streaming platforms is driving massive demand for media localization — especially in LATAM and Southeast Asia.",
+        vocab: [
+          { term: 'Expanding streaming platforms', desc: '「ストリーミングプラットフォームの拡大（すること）」。動名詞が主語。' },
+          { term: 'driving massive demand', desc: '「大きな需要を生み出している」。drive は「引き起こす・推進する」という意味のビジネス定番動詞。' }
+        ],
+        grammar_tip: '動名詞（Ving）を主語にすると「〜すること/という現象」を主語にできる。Expanding ~ is driving ~ で「〜の拡大が〜を推進している」という因果関係を表せる。'
+      },
+      {
+        grammar: '関係副詞 how',
+        jp: '差別化のポイントがコスト・スピードから、編集品質・文化的権威に変わってきてる流れは、うちのような会社にとっては追い風ですよね。',
+        hint: '「どのように差別化が変化してきたか」を関係副詞 how で表現しましょう。',
+        context: '業界トレンドが自社にとってどんな意味を持つかを説明している場面',
+        model: "How differentiation has shifted — from cost and speed to editorial quality and cultural authority — is actually a tailwind for companies like us.",
+        vocab: [
+          { term: 'How differentiation has shifted', desc: '「差別化がどのように変化してきたか」。how を名詞節として主語に使う。' },
+          { term: 'tailwind', desc: '「追い風・有利な状況」。headwind（向かい風）の対義語でビジネスでよく使われる。' }
+        ],
+        grammar_tip: 'How SV is ~ という構文で「SVがどうあるかは〜だ」という表現ができる。how の名詞節が主語になるパターン。'
+      },
+      {
+        grammar: 'nothing主語',
+        jp: '大手LSPの中でも、マンガや小説の出版ローカライズに本当に特化してる会社って一社もないんですよ。そこがうちの機会なんですよね。',
+        hint: 'nothing/nobody 主語で「誰もやっていない白地帯」を強調しましょう。',
+        context: '市場の空白地帯をチームや投資家に説明している場面',
+        model: "None of the major LSPs has a focused, differentiated offering for manga and fiction localization — that gap is exactly where our opportunity lies.",
+        vocab: [
+          { term: 'None of the major LSPs', desc: '「大手LSPのどこも」。nobody の名詞版。複数を対象にした否定。' },
+          { term: 'that gap is where our opportunity lies', desc: '「そのギャップこそ我々の機会がある場所」。関係副詞 where を使った強調表現。' }
+        ],
+        grammar_tip: 'None of ~ has ~ という nobody 的な主語の構文。「〜の中で誰も〜していない」という市場の空白を指摘するときに効果的。'
+      }
+    ]
+  },
+  {
+    id: 'ai_commoditization',
+    label: 'AI化と差別化の行方',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'AI化が進むことで、基本的な翻訳作業はどんどんコモディティ化してきていて、価値の源泉がどこになるかが今後の課題なんですよね。',
+        hint: 'AI化による業界変化の現状をシンプルに説明しましょう。',
+        context: 'チームでAI化トレンドについてブレインストーミングしている場面',
+        model: "AI is commoditizing baseline translation work, which means the real question now is where value actually comes from in this industry.",
+        vocab: [
+          { term: 'commoditizing', desc: '「コモディティ化している（させている）」。差別化が難しくなり価格競争に陥る状況を指す業界用語。' },
+          { term: 'where value comes from', desc: '「価値の源泉はどこにあるか」。間接疑問文の形で核心的な問いを表現。' }
+        ],
+        grammar_tip: 'AI is commoditizing ~ という現在進行形で、今まさに起きている変化を表す。which means で「だからこそ〜という問題がある」という論理展開ができる。'
+      },
+      {
+        grammar: 'not as...as',
+        jp: 'AIが生成した翻訳って、スピードやコストの面では人間を大幅に上回るんですけど、文化的なニュアンスを正確に再現するという点ではまだまだ人間ほどの精度は出ないですよね。',
+        hint: 'AIと人間の能力を「〜ほど〜ではない」という比較否定で表現しましょう。',
+        context: 'AIと人間翻訳の違いをクライアントや社内に説明している場面',
+        model: "AI-generated translation isn't as accurate as human translation when it comes to capturing cultural nuance — speed and cost, yes, but cultural depth, not yet.",
+        vocab: [
+          { term: "isn't as accurate as ~", desc: '「〜ほど正確ではない」。比較否定の基本形。' },
+          { term: 'capturing cultural nuance', desc: '「文化的なニュアンスをとらえること」。localization の核心的なスキルを表す表現。' }
+        ],
+        grammar_tip: 'not as ~ as は「〜ほど〜ではない」という比較否定の基本構文。when it comes to ~ で「〜の点においては」という条件を加えると比較が明確になる。'
+      },
+      {
+        grammar: 'nothing主語',
+        jp: 'AIができないことがまだたくさんあって、特に作者のボイスを保つとか、文化的な文脈を深く理解するみたいな部分は、まだ人間の仕事ですよね。',
+        hint: 'nothing 主語で「AIには到底できないこと」を表現しましょう。',
+        context: 'AIの限界について社内やクライアントに説明している場面',
+        model: "Nothing in current AI can truly replicate preserving an author's voice or deeply understanding cultural context — that's still human work.",
+        vocab: [
+          { term: "Nothing in current AI can replicate ~", desc: '「現在のAIの中で〜を真に再現できるものはない」。AIの根本的な限界を指摘する表現。' },
+          { term: "author's voice", desc: '「作者の語り口・個性」。文学翻訳で最も大切にされる要素の一つ。' }
+        ],
+        grammar_tip: 'Nothing in A can B は「Aの中でBできるものは何もない」という全否定の構文。AIの根本的な限界を語るときに効果的。'
+      },
+      {
+        grammar: 'so that SV（目的）',
+        jp: 'うちはAIを使いながらも、人間の文化的な判断を残してるのは、クライアントに最高の品質と最高のスピードを同時に届けられるようにするためなんですよ。',
+        hint: '「〜できるように〜している」という目的の表現でワークフローの設計意図を説明しましょう。',
+        context: 'ハイブリッドモデルの目的をクライアントに説明している場面',
+        model: "We use AI for efficiency and keep human judgment in the loop so that we can deliver both top quality and fast turnaround to our clients.",
+        vocab: [
+          { term: 'keep ~ in the loop', desc: '「〜をプロセスの中に残す・関与させ続ける」。プロセスに人間を組み込む意味。' },
+          { term: 'fast turnaround', desc: '「素早い納品・素早い折り返し」。納期やレスポンスの速さを表すビジネス定番表現。' }
+        ],
+        grammar_tip: 'so that SV で目的を表す。We do A and B so that we can deliver C は「CをできるようにAとBをする」という目的の説明パターン。'
+      },
+      {
+        grammar: '関係代名詞 what（目的格）',
+        jp: 'AIがどれだけ進化しても、最終的に出版社が求めてるのって、読者の心に響く物語体験なんですよ。それはテクノロジーだけじゃ作れない。',
+        hint: '関係代名詞 what で「出版社が本当に求めているもの」を明確に伝えましょう。',
+        context: 'AIの役割と人間の役割を整理している場面',
+        model: "No matter how advanced AI gets, what publishers ultimately want is a story experience that resonates with readers — and that's something technology alone can't manufacture.",
+        vocab: [
+          { term: 'no matter how advanced AI gets', desc: '「AIがどれだけ進化しても」。no matter how SV という譲歩構文。' },
+          { term: 'resonates with readers', desc: '「読者の心に響く」。connect with と同義だが resonates の方が文学的・感情的ニュアンスが強い。' }
+        ],
+        grammar_tip: 'What publishers ultimately want is ~ は「出版社が最終的に求めるものは〜だ」という強調構文。関係代名詞 what を目的格で使っている。'
+      }
+    ]
+  },
+  {
+    id: 'ma_consolidation',
+    label: 'M&A統合の波',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'LSP業界って今、大手がどんどん小さい会社を買収していく「メガLSP化」が進んでいるんですよ。Propioとか、Lionbridgeとかが典型ですね。',
+        hint: 'M&A統合という業界トレンドをシンプルに説明しましょう。',
+        context: 'LSP業界のM&Aトレンドをチームに説明している場面',
+        model: "The LSP industry is seeing a major consolidation trend — large players like Propio and Lionbridge keep acquiring smaller companies to build mega-scale platforms.",
+        vocab: [
+          { term: 'consolidation trend', desc: '「統合・集約のトレンド」。業界再編の方向性を示すビジネス用語。' },
+          { term: 'mega-scale platforms', desc: '「超大規模なプラットフォーム」。M&Aによって生まれた巨大なサービス基盤を指す。' }
+        ],
+        grammar_tip: '現在進行形で「今まさに起きているトレンド」を表す。keep Ving で「〜し続けている」という継続を強調できる。'
+      },
+      {
+        grammar: '現在完了形',
+        jp: 'Propioは2024年だけで4社買収して、2025年にはCyraComとの統合で、医療通訳の最大手2社がひとつになりましたよね。',
+        hint: 'M&Aの実績を現在完了で表現しましょう。',
+        context: 'Propioの急成長を同僚に説明している場面',
+        model: "Propio has completed four acquisitions in 2024 alone, and with the CyraCom merger in 2025, the two largest healthcare interpreting providers have come together.",
+        vocab: [
+          { term: 'has completed four acquisitions', desc: '「4件の買収を完了してきた」。現在完了で積み上げてきた実績を伝える。' },
+          { term: 'have come together', desc: '「統合された・ひとつになった」。merged よりカジュアルで口語的。' }
+        ],
+        grammar_tip: "have completed ~ は現在完了で「〜を完了してきた」というプロセスの積み上げを表す。They've = They have の短縮形。"
+      },
+      {
+        grammar: 'not as...as',
+        jp: '大手LSPが提供するサービスの幅は圧倒的なんですけど、マンガや小説みたいな専門分野に関しては、うちみたいなブティック会社ほどの深みはないですよね。',
+        hint: '「〜ほど〜ではない」という比較否定でブティック企業の強みを表現しましょう。',
+        context: '大手LSPとの差別化を投資家に説明している場面',
+        model: "The mega-LSPs aren't as deep in specialized niches like manga and fiction as boutique players — breadth is their game, not depth.",
+        vocab: [
+          { term: "aren't as deep in ~", desc: '「〜において深みがない・専門性がない」。as deep as の否定形。' },
+          { term: 'breadth is their game, not depth', desc: '「幅の広さが彼らの戦略であって、深みではない」。戦略の違いを対比する口語表現。' }
+        ],
+        grammar_tip: 'not as ~ as は「〜ほど〜ではない」という比較否定。breadth vs depth という対比構造を後ろで補足するとさらに分かりやすくなる。'
+      },
+      {
+        grammar: 'nobody主語',
+        jp: '大手が次々と買収を進めている中で、マンガ・フィクションのローカライズという特定ニッチに本気で投資している会社って一社もないんですよ。',
+        hint: 'nobody主語で「誰も取り組んでいないニッチ」を強調しましょう。',
+        context: 'マンガ・フィクション市場の機会をチームや投資家に説明している場面',
+        model: "Nobody among the large LSPs is seriously investing in manga and fiction localization as a strategic priority — that niche is completely open.",
+        vocab: [
+          { term: 'Nobody among ~ is seriously investing in ~', desc: '「〜の中でだれも〜に本格的に投資していない」。nobody を主語にした全否定の構文。' },
+          { term: 'completely open', desc: '「完全に手つかず・オープン」。市場の空白地帯を表す口語的表現。' }
+        ],
+        grammar_tip: 'Nobody (among ~) is Ving は「（〜の中の）誰も〜していない」という全否定構文。市場の空白を指摘するときに説得力が出る。'
+      },
+      {
+        grammar: '仮定法過去',
+        jp: 'もし大手LSPがマンガ出版ローカライズに本格参入してきたとしたら、うちみたいなブティックプレイヤーはAnimateグループとの関係を差別化要素として打ち出すことが重要になってきますよね。',
+        hint: '「もし〜してきたとしたら」という仮定法で将来のシナリオと自社の対応策を表現しましょう。',
+        context: '最悪のシナリオに対する戦略を投資家に説明している場面',
+        model: "If a major LSP moved seriously into manga publishing localization, it would become critical for boutique players like us to lean hard into our Animate Group relationship as a differentiator.",
+        vocab: [
+          { term: 'lean hard into ~', desc: '「〜を強みとして徹底的に打ち出す」。rely heavily on よりも積極的なニュアンス。' },
+          { term: 'as a differentiator', desc: '「差別化要因として」。ビジネスピッチで頻出の表現。' }
+        ],
+        grammar_tip: 'If S 過去形, it would become ~ は仮定法過去。最悪のシナリオに備えながら自社の強みを強調するときに使えるパターン。'
+      }
+    ]
+  },
+  {
+    id: 'fiction_wedge',
+    label: 'フィクション・ライトノベル戦略',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'ライトノベルや文芸小説のローカライズって、マンガとは全然違うスキルセットが必要なんですよ。物語の声感とか、散文のリズムとか、文化的な表現の翻訳とか。',
+        hint: 'フィクション翻訳の特殊性をシンプルに説明しましょう。',
+        context: 'ライトノベル翻訳の難しさをクライアントやチームに説明している場面',
+        model: 'Literary fiction and light novel localization requires a completely different skill set from manga — narrative voice, prose rhythm, and cultural idiom all come into play.',
+        vocab: [
+          { term: 'requires a different skill set', desc: '「異なるスキルセットを必要とする」。needs とほぼ同義だが requires の方がフォーマルな表現。' },
+          { term: 'come into play', desc: '「関与してくる・重要になってくる」。特定の要素が「働く・機能する」というイディオム。' }
+        ],
+        grammar_tip: '現在形で「一般的な事実・特性」を述べる基本パターン。requires + 名詞 で「〜が必要だ」という要件を明確に伝えられる。'
+      },
+      {
+        grammar: '関係代名詞 what（主格）',
+        jp: '文学翻訳で本当に大事なのって、単語の意味を正確に移すことじゃなくて、読者が原文と同じ感情体験を持てるかどうかなんですよ。',
+        hint: '関係代名詞 what で「文学翻訳の本質」を明確に表現しましょう。',
+        context: '文学翻訳の価値をクライアントや出版社に説明している場面',
+        model: "What matters in literary translation isn't accurate word transfer — it's giving the reader the same emotional experience as the original.",
+        vocab: [
+          { term: 'What matters in ~', desc: '「〜において重要なことは〜だ」。what を主語にした強調構文。' },
+          { term: 'emotional experience', desc: '「感情的体験・感情的経験」。読者が感じる主観的な体験を表す。' }
+        ],
+        grammar_tip: 'What matters in A is ~ は「Aにおいて大事なのは〜だ」という強調構文。what を関係代名詞として主語に使うパターン。'
+      },
+      {
+        grammar: '動名詞主語',
+        jp: '作者の意図や文体を尊重しながら翻訳するって、マンガのページレート翻訳とは全く異なるスキルと時間が必要なんですよ。',
+        hint: '「〜すること」を動名詞で主語にして翻訳の難しさを表現しましょう。',
+        context: '文学翻訳の専門性をチームや採用候補者に説明している場面',
+        model: "Translating while honoring an author's intent and style requires completely different skills and time than per-page manga translation.",
+        vocab: [
+          { term: "honoring an author's intent and style", desc: '「作者の意図とスタイルを尊重すること」。honor は「敬意を持って従う」という意味。' },
+          { term: 'per-page manga translation', desc: '「1ページあたりのマンガ翻訳」。ページレートで価格設定されるマンガ翻訳を指す。' }
+        ],
+        grammar_tip: '動名詞（Ving）を主語にする構文。Translating while Ving requires ~ で「〜しながら翻訳することは〜を必要とする」という複雑な内容を主語にできる。'
+      },
+      {
+        grammar: '反対の最上級否定',
+        jp: 'ライトノベルのローカライズって、言語的なスキルだけじゃなくて日本のサブカルチャーへの深い理解も必要だから、決して簡単なキャリアじゃないんですよね。',
+        hint: '「決して簡単ではない」という最上級否定で専門性の高さを表現しましょう。',
+        context: '文学翻訳者の採用やトレーニングについて話し合っている場面',
+        model: "Light novel localization isn't the easiest career path — it demands both linguistic skill and a deep understanding of Japanese subculture.",
+        vocab: [
+          { term: "isn't the easiest career path", desc: '「決して楽なキャリアではない」。the easiest の否定で強く「難しい」ことを伝える。' },
+          { term: 'demands both A and B', desc: '「AとB両方を要求する」。requires と同義だが demands の方がより強い要求感がある。' }
+        ],
+        grammar_tip: 'not the easiest は「もっとも簡単なわけではない＝難しい」という最上級の否定。プレッシャーをかけずに「難しい」ことを伝えるやわらかい表現。'
+      },
+      {
+        grammar: '関係副詞 how',
+        jp: '文芸品質をどうやって測るかって、クライアントに正直に説明するのが難しいんですけど、読者のレビューとか、業界の評判とか、シリーズの継続受注とかが指標になりますよね。',
+        hint: '「どのように品質を測るか」を関係副詞 how で表現しましょう。',
+        context: '文学翻訳の品質評価基準をクライアントに説明している場面',
+        model: "How we measure literary quality is honestly hard to explain — but reader feedback, industry reputation, and repeat series contracts are the real signals.",
+        vocab: [
+          { term: 'How we measure ~', desc: '「私たちが〜をどう測るか」。how を名詞節として主語にしたパターン。' },
+          { term: 'repeat series contracts', desc: '「シリーズの継続発注」。翻訳品質が認められた証拠として使える指標。' }
+        ],
+        grammar_tip: 'How SV is ~ という構文で「SVがどうあるかは〜だ」という表現ができる。how の名詞節が主語になるパターン。'
+      }
+    ]
+  },
+  {
+    id: 'animate_moat',
+    label: 'Animateグループの優位性',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'Animateグループって、日本最大のオタク系小売・メディアエコシステムで、Frontier Works経由で日本のIPホルダーとの直接のつながりがあるんですよ。',
+        hint: 'Animateグループの立ち位置をシンプルに説明しましょう。',
+        context: 'Animateグループとの関係を投資家や外部パートナーに説明している場面',
+        model: "The Animate Group is Japan's dominant otaku retail and media ecosystem, and through Frontier Works we have direct access to Japanese IP holders.",
+        vocab: [
+          { term: "Japan's dominant otaku retail ecosystem", desc: '「日本最大のオタク系小売エコシステム」。Animateグループを説明するときの定番フレーズ。' },
+          { term: 'direct access to ~', desc: '「〜への直接のアクセス・つながり」。仲介なしに接続できることを指す。' }
+        ],
+        grammar_tip: '現在形で「事実・特徴」を伝えるシンプルなパターン。through ~ で「〜を通じて」という経路を表現できる。'
+      },
+      {
+        grammar: '関係代名詞 what（主格）',
+        jp: 'Animateとの関係がうちに与えてくれてるのって、出版社への信頼性だけじゃなくて、他の翻訳会社には絶対持てない「オタク文化ど真ん中」のオーセンティシティなんですよ。',
+        hint: '関係代名詞 what で「Animateグループが真に提供するもの」を強調しましょう。',
+        context: '自社の競争優位性をピッチで説明している場面',
+        model: "What the Animate connection really gives us is authenticity — the kind of otaku-native credibility that no independent services company can buy or replicate.",
+        vocab: [
+          { term: 'authenticity', desc: '「オーセンティシティ・本物らしさ」。文化的な真正性を表す重要なコンセプト。' },
+          { term: 'otaku-native credibility', desc: '「オタク文化ネイティブとしての信頼性」。Abracadabra の独自ポジショニングを表す表現。' }
+        ],
+        grammar_tip: 'What A gives us is ~ は「Aが私たちに与えてくれるものは〜だ」という強調構文。what を主格の関係代名詞として使っている。'
+      },
+      {
+        grammar: '関係副詞 where（場所以外）',
+        jp: 'AnimateグループのIPエコシステムって、うちが本当に他社に勝てる場面がある領域で、それは大手LSPが短期間では絶対に真似できないんですよ。',
+        hint: '「自社が勝てる領域」を関係副詞 where で表現しましょう。',
+        context: '自社の差別化を投資家や社内に説明している場面',
+        model: "The Animate Group IP ecosystem is exactly where we have an edge that large LSPs can't replicate quickly.",
+        vocab: [
+          { term: 'exactly where we have an edge', desc: '「まさにうちが優位性を持つ場所（領域）」。関係副詞 where の比喩的用法。' },
+          { term: "can't replicate quickly", desc: '「すぐには真似できない」。短期的な模倣困難性を表す。' }
+        ],
+        grammar_tip: '~ is exactly where SV は「〜はまさにSVする領域・場面だ」という強調表現。関係副詞 where を使って抽象的な「競争優位の場面」を表している。'
+      },
+      {
+        grammar: '仮定法過去',
+        jp: 'もしAnimateグループとのつながりがなかったとしたら、うちは他の小規模ローカライズ会社と大して変わらない存在だったかもしれないですよね。',
+        hint: '「もし〜がなかったら」という仮定法で自社の強みの重要性を際立たせましょう。',
+        context: '自社の強みの本質的な価値を振り返っている場面',
+        model: "If we didn't have the Animate Group relationship, we'd probably just be another small localization company — that connection is honestly what sets us apart.",
+        vocab: [
+          { term: 'just be another small localization company', desc: '「ただの小さな翻訳会社にすぎない」。just another ~ は「よくある〜の一つ」という意味の口語表現。' },
+          { term: 'sets us apart', desc: '「私たちを差別化する」。distinguishes us from others より口語的で使いやすい。' }
+        ],
+        grammar_tip: "If we didn't have ~, we'd be ~ は仮定法過去のパターン。「もし〜がなかったら」という形で強みの重要性を逆説的に強調できる。"
+      },
+      {
+        grammar: 'nothing主語',
+        jp: '大手LSPのどこを見ても、Animateグループに相当するIP生態系とのつながりを持ってる会社って一社もないんですよ。これがうちの本質的な参入障壁なんですよね。',
+        hint: 'nothing/nobody 主語で「誰も持っていない優位性」を強調しましょう。',
+        context: '自社の競争優位の持続性を投資家に説明している場面',
+        model: "Nothing among the major LSPs comes close to the IP ecosystem access we have through Animate Group — that's our core moat.",
+        vocab: [
+          { term: 'comes close to ~', desc: '「〜に近づく・匹敵する」。Nothing comes close to ~ で「〜に匹敵するものは何もない」という強調否定。' },
+          { term: 'core moat', desc: '「核心的な参入障壁」。競合が容易に超えられない競争優位を指すビジネス用語。' }
+        ],
+        grammar_tip: 'Nothing among A comes close to B は「Aの中でBに匹敵するものは何もない」という強調否定。自社のユニークな優位性を表すときに効果的。'
+      }
+    ]
+  },
+  {
+    id: 'quality_positioning',
+    label: '品質ポジショニング戦略',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: '翻訳の品質って、正確さだけじゃなくて、文化的なオーセンティシティ、編集のポリッシュ、そして原作の声感を守れているかどうかで決まるんですよ。',
+        hint: '翻訳品質の定義をシンプルに説明しましょう。',
+        context: 'クライアントや新しいスタッフに翻訳品質の基準を説明している場面',
+        model: "Translation quality comes down to more than accuracy — it's about cultural authenticity, editorial polish, and staying true to the original voice.",
+        vocab: [
+          { term: 'comes down to ~', desc: '「〜に集約される・〜次第だ」。最終的に重要なことを表す口語慣用句。' },
+          { term: 'staying true to the original voice', desc: '「原作の声感・スタイルを守り続けること」。文学翻訳の核心的な価値観を表す表現。' }
+        ],
+        grammar_tip: 'It comes down to more than ~ は「単に〜だけではない」という否定展開。品質の定義を複数の要素で広げるパターン。'
+      },
+      {
+        grammar: '動名詞主語',
+        jp: '品質にこだわることって、短期的にはコストがかかるように見えるんですけど、長期的には出版社との継続的な関係と評判につながるんですよ。',
+        hint: '「品質にこだわること」を動名詞で主語にして長期的価値を説明しましょう。',
+        context: '品質優先の戦略の価値を社内や投資家に説明している場面',
+        model: "Prioritizing quality might look expensive in the short term, but it builds the kind of publisher relationships and reputation that pay off long term.",
+        vocab: [
+          { term: 'Prioritizing quality', desc: '「品質を優先すること」。動名詞が主語になるパターン。' },
+          { term: 'pay off long term', desc: '「長期的に報われる・元が取れる」。投資や努力が将来的に実を結ぶことを表す。' }
+        ],
+        grammar_tip: '動名詞（Ving）を主語にする構文。Prioritizing ~ might look ... but it builds ... で「〜に見えるが実は〜を作る」という逆接パターン。'
+      },
+      {
+        grammar: 'not as...as',
+        jp: 'MediBangのコストモデルって確かに競争力があるんですけど、翻訳者への低報酬が品質の天井を作っていて、うちが追求してる文学品質にはとても及ばないですよね。',
+        hint: '「〜ほど〜ではない」という比較否定で品質格差を表現しましょう。',
+        context: '競合との品質差を出版社に説明している場面',
+        model: "MediBang's cost model is competitive, but their quality isn't as high as what we deliver — the low translator rates create a ceiling that limits the literary depth we aim for.",
+        vocab: [
+          { term: "isn't as high as what we deliver", desc: '「私たちが提供するものほど高くない」。what を使って比較対象を具体化している。' },
+          { term: 'limits the literary depth', desc: '「文学的な深みを制限する」。低単価モデルの構造的な問題を指摘する表現。' }
+        ],
+        grammar_tip: 'not as ~ as は比較否定の基本形。what we deliver で「私たちが提供するもの」という比較対象を具体的に示すと説得力が増す。'
+      },
+      {
+        grammar: '関係副詞 how',
+        jp: 'うちがどんな品質基準を持っているかって、クライアントに一番よく伝わるのは、実際の翻訳サンプルを見せるとか、継続受注の実績を示すことなんですよ。',
+        hint: '「どのように品質を伝えるか」を関係副詞 how で表現しましょう。',
+        context: '新規クライアントへの提案方法を社内で議論している場面',
+        model: "How we communicate our quality standards is best shown through sample translations and the proof of continued series commissions from clients.",
+        vocab: [
+          { term: 'How we communicate ~', desc: '「私たちが〜をどう伝えるか」。how の名詞節が主語になるパターン。' },
+          { term: 'continued series commissions', desc: '「シリーズの継続発注」。品質認定の証拠として機能するビジネス実績。' }
+        ],
+        grammar_tip: 'How SV is best shown through ~ は「SVがどうあるかは〜によって最もよく示される」という構文。how の名詞節が主語になるパターン。'
+      },
+      {
+        grammar: '反対の最上級否定',
+        jp: '最高品質の翻訳者を維持し続けることって、決して楽な仕事じゃないんですよ。継続的なフィードバックと競争力のある報酬体系が不可欠ですよね。',
+        hint: '「決して楽ではない」という最上級否定でチャレンジの重さを表現しましょう。',
+        context: '高品質な翻訳チームを維持する難しさを社内で話し合っている場面',
+        model: "Retaining top-tier translators isn't the easiest challenge — it takes ongoing feedback and competitive pay to keep the best people.",
+        vocab: [
+          { term: "isn't the easiest challenge", desc: '「決して簡単な課題ではない」。the easiest の否定で「難しい」を強調。' },
+          { term: 'retaining top-tier translators', desc: '「トップクラスの翻訳者を確保し続けること」。retain は「雇用・関係を維持する」という意味。' }
+        ],
+        grammar_tip: 'not the easiest ~ は「〜の中で最も簡単というわけでもない＝難しい」という最上級の否定。challenge や task とセットで使うことが多い。'
+      }
+    ]
+  },
+  {
+    id: 'translator_market',
+    label: '翻訳者市場と採用戦略',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'マンガ翻訳者の市場って、優秀な人材が限られていて、業界標準は1ページ5ドル前後なんですけど、それを下回る会社もあって品質格差が生まれてるんですよ。',
+        hint: '翻訳者市場の現状をシンプルに説明しましょう。',
+        context: '翻訳者採用の状況をチームや投資家に説明している場面',
+        model: "The manga translator market is tight — the professional standard is around $5 per page, but some companies undercut that significantly, which creates real quality gaps.",
+        vocab: [
+          { term: 'the market is tight', desc: '「市場が逼迫している・競争が激しい」。人材や資源が限られていることを表す口語的表現。' },
+          { term: 'undercut', desc: '「（価格・賃金を）下回る・値下げして競争する」。意図的に低い価格を設定することを指す。' }
+        ],
+        grammar_tip: '現在形で「一般的な市場の状態」を伝えるパターン。which creates で「それによって〜が生まれる」という結果を追加できる。'
+      },
+      {
+        grammar: 'nothing主語',
+        jp: 'MediBangみたいに1ページ120円という単価では、プロとして求められる水準の翻訳者を惹きつけられる要素は何もないですよね。',
+        hint: 'nothing 主語で「低単価では採用できない」ことを表現しましょう。',
+        context: '低単価モデルの採用への影響を議論している場面',
+        model: "At ¥120 per page, there's nothing about that pay rate that would attract translators at the professional level publishers actually need.",
+        vocab: [
+          { term: "there's nothing about ~ that would attract ~", desc: '「〜について〜を惹きつける要素は何もない」。nothing 主語の慣用的パターン。' },
+          { term: 'at the professional level', desc: '「プロとして求められる水準で」。期待される品質・スキルレベルを示す。' }
+        ],
+        grammar_tip: "There's nothing about A that would B は「AについてBするものは何もない」という nothing 主語構文の応用形。低条件の問題を指摘するのに使える。"
+      },
+      {
+        grammar: 'so that SV（目的）',
+        jp: 'いい翻訳者に長く関わってもらえるように、うちはAnimateグループとのつながりを生かして、サブカルチャーへの情熱も報われるような環境を整えてるんですよ。',
+        hint: '「〜できるように〜している」という目的の表現で採用環境を説明しましょう。',
+        context: '採用・リテンション戦略を社内やパートナーに説明している場面',
+        model: "We use our Animate Group connection to create a working environment that speaks to translators' passion for subculture, so that top talent actually wants to work with us.",
+        vocab: [
+          { term: "speaks to ~", desc: '「〜に響く・訴えかける」。appeal to と同義だが speaks to の方が口語的で感情的なニュアンスがある。' },
+          { term: 'top talent wants to work with us', desc: '「優秀な人材がうちで働きたいと思う」。リテンション・採用の理想的な状態を表す。' }
+        ],
+        grammar_tip: 'so that SV で目的を表す。We create A so that B wants to C は「BがCしたいと思えるようにAを作る」という採用環境の説明パターン。'
+      },
+      {
+        grammar: '間接疑問文',
+        jp: 'どういう採用戦略が優秀な翻訳者の長期的なエンゲージメントにつながるかは、業界全体の課題でもあるし、うちのビジネスの持続性に直結する問題ですよね。',
+        hint: 'どのような採用戦略が有効かという間接疑問文で課題を表現しましょう。',
+        context: '翻訳者採用・リテンション戦略を長期的視点で議論している場面',
+        model: "What kind of recruitment strategy leads to long-term translator engagement is a question the whole industry is grappling with — and it directly affects our sustainability.",
+        vocab: [
+          { term: 'What kind of ~ leads to ~', desc: '「どのような〜が〜につながるか」という間接疑問文の形。' },
+          { term: 'grappling with', desc: '「格闘している・取り組んでいる」。struggling with よりも「真剣に取り組んでいる」ニュアンスがある。' }
+        ],
+        grammar_tip: 'What kind of A leads to B is a question ~ は間接疑問文のパターン。what kind of を使って種類・種別を問う形。'
+      },
+      {
+        grammar: '仮定法過去',
+        jp: 'もし優秀な翻訳者たちがみんなMediBangの低単価を理由に業界を離れたとしたら、日本コンテンツのローカライズクオリティ全体が下がってしまいますよね。それがうちが品質優先を貫く理由でもあります。',
+        hint: '「もし〜したとしたら」という仮定法で業界全体への影響を表現しましょう。',
+        context: '業界の品質水準についてパートナーや投資家に説明している場面',
+        model: "If the best translators all left the industry because of below-market rates like MediBang's, overall localization quality for Japanese content would really suffer — which is part of why we hold the line on pay.",
+        vocab: [
+          { term: 'left the industry', desc: '「業界を去る」。quit the field とも言えるが left の方が口語的。' },
+          { term: 'hold the line on ~', desc: '「〜（基準・価格）を守り続ける・妥協しない」。立場や基準を維持するという意味のイディオム。' }
+        ],
+        grammar_tip: 'If S 過去形 (all left), S would suffer は仮定法過去のパターン。業界全体の悪影響シナリオを提示しながら自社の姿勢を正当化するのに使える。'
+      }
+    ]
+  },
+  {
+    id: 'latam_expansion',
+    label: 'LATAM市場戦略',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'ラテンアメリカのコンテンツ市場って、ストリーミングの普及とともに急速に拡大していて、マンガや日本コンテンツへの需要も伸びてきてるんですよ。',
+        hint: 'LATAM市場の成長をシンプルに説明しましょう。',
+        context: 'LATAM市場の機会をチームに説明している場面',
+        model: 'The Latin American content market is expanding rapidly alongside streaming growth, and demand for manga and Japanese content is growing with it.',
+        vocab: [
+          { term: 'expanding rapidly alongside ~', desc: '「〜とともに急速に拡大している」。in parallel with とも言える。' },
+          { term: 'demand is growing with it', desc: '「需要もそれとともに伸びている」。it がストリーミング成長を指す代名詞。' }
+        ],
+        grammar_tip: '現在形と現在進行形を組み合わせて「今起きている市場変化」を表すパターン。alongside ~ で「〜と同時進行で」という関連性を示せる。'
+      },
+      {
+        grammar: '現在完了形',
+        jp: 'IyunoはUnidub Brazilを買収することでブラジルへの展開を進めてきて、LATAMでの拠点を作ってきてるんですよね。',
+        hint: 'Iyunoのラテンアメリカ展開を現在完了で表現しましょう。',
+        context: 'IyunoのLATAM戦略を競合分析として説明している場面',
+        model: "Iyuno has expanded into Brazil through the Unidub acquisition and has been steadily building a LATAM footprint.",
+        vocab: [
+          { term: 'has expanded into ~', desc: '「〜に展開してきた」。現在完了でプロセスを表す。' },
+          { term: 'building a LATAM footprint', desc: '「ラテンアメリカでの拠点を作っていく」。footprint はビジネス上の「存在感・拠点」を指す。' }
+        ],
+        grammar_tip: "have expanded into ~ は現在完了で「〜への展開を完了してきた」というプロセスを表す。has been Ving で継続中の取り組みを強調できる。"
+      },
+      {
+        grammar: 'not as...as',
+        jp: 'LATAMの市場ってまだ東南アジアほど確立されていないんですけど、成長ポテンシャルはこっちの方が大きいって見る人もいるんですよね。',
+        hint: '「〜ほど〜ではない」という比較否定で市場の成熟度を表現しましょう。',
+        context: 'LATAMと東南アジア市場を比較分析している場面',
+        model: "The LATAM market isn't as mature as Southeast Asia yet, but some see it as having even more upside potential in the long run.",
+        vocab: [
+          { term: "isn't as mature as ~", desc: '「〜ほど成熟していない」。not as developed as と同義で市場の発展度合いを比較する表現。' },
+          { term: 'upside potential', desc: '「上昇余地・成長ポテンシャル」。市場が伸びる可能性を表すビジネス用語。' }
+        ],
+        grammar_tip: 'not as mature as は「〜ほど成熟していない」という比較否定。yet を入れると「まだ〜ではないが」という含意が生まれる。'
+      },
+      {
+        grammar: '動名詞主語',
+        jp: 'スペイン語圏でマンガのローカライズを早めに確立することって、一番成長速度が速い市場でのファーストムーバーアドバンテージを得ることに直結するんですよ。',
+        hint: '「〜すること」を動名詞で主語にして戦略的な先行投資の意義を説明しましょう。',
+        context: 'LATAM市場への早期参入戦略を投資家や経営陣に説明している場面',
+        model: "Establishing manga localization credentials in the Spanish-speaking market early gives us a first-mover advantage in what could be the fastest-growing segment.",
+        vocab: [
+          { term: 'Establishing ~ credentials', desc: '「〜における実績・信頼性を確立すること」。動名詞が主語になるパターン。' },
+          { term: 'first-mover advantage', desc: '「先行者優位」。市場や分野に早期参入することで得られるアドバンテージ。' }
+        ],
+        grammar_tip: '動名詞（Ving）を主語にする構文。Establishing ~ gives us ~ で「〜を確立することが〜をもたらす」という因果関係を表せる。'
+      },
+      {
+        grammar: '間接疑問文',
+        jp: 'LATAMの市場がどこまで伸びるかは、Netflixなどのストリーミング各社の投資計画や、日本コンテンツへの現地の熱量次第ですよね。',
+        hint: '「どこまで伸びるかは〜次第」という間接疑問文で不確実性と要因を表現しましょう。',
+        context: 'LATAM市場の将来を分析している場面',
+        model: "How far the LATAM market will grow depends on how much streaming platforms like Netflix invest there, and how strong local appetite for Japanese content really is.",
+        vocab: [
+          { term: 'How far ~ will grow depends on ~', desc: '「〜がどこまで成長するかは〜次第だ」。間接疑問文を使った不確実性の分析。' },
+          { term: 'local appetite for ~', desc: '「〜への現地の需要・関心」。appetite は「欲求・需要」を表す比喩的表現。' }
+        ],
+        grammar_tip: 'How far SV will ~ depends on ~ という間接疑問文のパターン。将来の変数と依存要因を一文で整理する分析的表現。'
+      }
+    ]
+  },
+  {
+    id: 'hybrid_workflow',
+    label: 'ハイブリッドワークフロー',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'ハイブリッドモデルって、AIが得意な作業はAIにやらせて、文化的な判断や編集が必要な部分は人間が担当するっていう分業体制のことですよ。',
+        hint: 'ハイブリッドモデルをシンプルに定義しましょう。',
+        context: 'ハイブリッドワークフローをクライアントや新しいスタッフに説明している場面',
+        model: 'The hybrid model means AI handles what it does best, while humans take over where cultural judgment and editorial work are needed.',
+        vocab: [
+          { term: 'handles what it does best', desc: '「得意なことを担当する」。AI の役割を簡潔に説明するパターン。' },
+          { term: 'take over where ~', desc: '「〜が必要な場面で引き継ぐ」。引き継ぎのタイミングを where 節で表現。' }
+        ],
+        grammar_tip: 'AI handles A, while humans take over B は「AIがAをやる一方で、人間がBを担当する」という対比の基本構文。'
+      },
+      {
+        grammar: 'so that SV（目的）',
+        jp: 'MantraEngineを使って基本的な翻訳をスピードアップして、その分の時間をプロの翻訳者が文化適応や編集に集中できるようにしているんですよ。',
+        hint: '「〜できるように〜している」という目的の表現でワークフローの設計意図を説明しましょう。',
+        context: 'ハイブリッドワークフローの設計思想を説明している場面',
+        model: "We speed up the basic translation layer with Mantra Engine so that our professional translators can focus their time on cultural adaptation and editorial polish.",
+        vocab: [
+          { term: 'speed up the basic translation layer', desc: '「基本翻訳層をスピードアップする」。ハイブリッドモデルの役割分担を技術的に説明。' },
+          { term: 'cultural adaptation and editorial polish', desc: '「文化適応と編集の磨き上げ」。高品質ローカライズに必要な人間の仕事を表す。' }
+        ],
+        grammar_tip: 'We do A so that B can do C は「BがCできるようにAをする」という目的の構文。ワークフローの設計理由を説明するときに使いやすい。'
+      },
+      {
+        grammar: '反対の最上級否定',
+        jp: 'ハイブリッドモデルに移行することって、品質管理とかトランスレーターへのブリーフィングが複雑になるので、決して一番簡単な道ではないですよね。',
+        hint: '「決して簡単ではない」という最上級否定でハイブリッド移行の難しさを表現しましょう。',
+        context: 'ハイブリッドモデル導入の課題についてチームで話し合っている場面',
+        model: "Transitioning to a hybrid model isn't the simplest path — quality control gets more layered, and briefing translators on AI-assisted drafts adds complexity.",
+        vocab: [
+          { term: "isn't the simplest path", desc: '「最もシンプルな道ではない＝複雑な道だ」。最上級を否定した強調表現。' },
+          { term: 'gets more layered', desc: '「より多層的に・複雑になる」。add layers を動詞句で表現。' }
+        ],
+        grammar_tip: 'not the simplest/easiest は「最もシンプル・簡単というわけではない＝複雑だ」という最上級の否定。課題や難しさを伝えるやわらかい方法。'
+      },
+      {
+        grammar: '関係代名詞 what（主格）',
+        jp: 'ハイブリッドモデルが出版社に提供できるものって、AIだけのスピードと、人間だけの品質を、両方同時に実現することなんですよ。',
+        hint: '関係代名詞 what で「ハイブリッドモデルが真に提供するもの」を明確に伝えましょう。',
+        context: 'ハイブリッドモデルの価値をクライアントや出版社にピッチしている場面',
+        model: "What the hybrid model delivers to publishers is the speed you get from AI and the quality you get from human expertise — at the same time.",
+        vocab: [
+          { term: 'What A delivers to B', desc: '「AがBに届けるもの」。what を主語にした関係代名詞構文。' },
+          { term: 'at the same time', desc: '「同時に」。AIのスピードと人間の品質を同時に実現するというポイントを強調。' }
+        ],
+        grammar_tip: 'What A delivers to B is ~ は「AがBに提供するものは〜だ」という強調構文。what を主格の関係代名詞として使って価値提案を明確にする。'
+      },
+      {
+        grammar: '関係副詞 how',
+        jp: 'ハイブリッドワークフローが実際にどう機能するか、プロジェクト開始前にクライアントにしっかり説明しておくと、後々の品質確認もスムーズにいくんですよね。',
+        hint: '「どのように機能するか」を関係副詞 how で表現しましょう。',
+        context: 'クライアントへのオンボーディングプロセスを説明している場面',
+        model: "Explaining how the hybrid workflow functions before a project starts actually makes QA much smoother down the line.",
+        vocab: [
+          { term: 'Explaining how ~ functions', desc: '「〜がどのように機能するかを説明すること」。how の名詞節を目的語として使うパターン。' },
+          { term: 'makes QA much smoother', desc: '「品質確認をずっとスムーズにする」。QA = quality assurance の略。' }
+        ],
+        grammar_tip: 'Explaining how SV は動名詞句。how の名詞節が「どのように〜するか」という方法・プロセスの説明に使われるパターン。'
+      }
+    ]
+  },
+  {
+    id: 'pitch_practice',
+    label: 'ピッチ総合練習',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'うちって、マンガと文芸小説に特化した東京のローカライズスタジオで、Animateグループという日本最大のオタクエコシステムとの関係を持つ唯一の会社なんですよ。',
+        hint: '自社のポジショニングをシンプルかつインパクトある一文にまとめましょう。',
+        context: '投資家やパートナーへのピッチを始める場面',
+        model: "We're a Tokyo-based boutique localization studio specializing in manga and literary fiction, and we're the only company with direct ties to the Animate Group — Japan's dominant otaku ecosystem.",
+        vocab: [
+          { term: 'boutique localization studio', desc: '「専門特化した小規模ローカライズスタジオ」。大手との対比でユニークさを表現。' },
+          { term: 'direct ties to ~', desc: '「〜との直接のつながり」。connections より「密接なつながり」のニュアンスがある。' }
+        ],
+        grammar_tip: "自社紹介の定番パターン。We're a ~ specializing in ... の形で「〜に特化した〜だ」とポジショニングを明確に伝える。"
+      },
+      {
+        grammar: '仮定法過去',
+        jp: 'もしうちがただの翻訳品質だけで勝負しようとしていたとしたら、MediBangやLionbridgeとの価格競争に巻き込まれて、利益率がどんどん下がっていたと思いますよ。',
+        hint: '「もし〜していたら」という仮定法で自社の差別化戦略の正しさを示しましょう。',
+        context: '競合との差別化戦略を投資家に説明している場面',
+        model: "If we were competing purely on translation quality alone, we'd be caught in a price war with MediBang and Lionbridge — and our margins would be getting squeezed.",
+        vocab: [
+          { term: 'competing purely on ~', desc: '「〜だけで勝負している」。価格や品質など単一の軸での競争を表す。' },
+          { term: 'caught in a price war', desc: '「価格競争に巻き込まれる」。avoid a price war（価格競争を避ける）の反対。' }
+        ],
+        grammar_tip: 'If S were Ving, S would be Ving は仮定法過去の進行形バージョン。現在の状況と異なる仮定のシナリオを語るときに使える。'
+      },
+      {
+        grammar: 'nobody主語',
+        jp: '大手LSPの中でも、Animateグループとのつながりもなく、ライトノベル・文芸小説のローカライズを本業にしてる会社って、一社もないんですよ。',
+        hint: 'nobody主語で自社のユニークな立ち位置を強調しましょう。',
+        context: '自社の独自性を投資家や出版社に強調している場面',
+        model: "Nobody else in this market combines Animate Group access with a genuine specialization in literary fiction and light novel localization — that combination is uniquely ours.",
+        vocab: [
+          { term: 'Nobody else combines A with B', desc: '「他に誰もAとBを組み合わせていない」。競合優位性のユニークさを強調する構文。' },
+          { term: 'uniquely ours', desc: '「完全にうちだけのもの」。unique to us とも言える。' }
+        ],
+        grammar_tip: 'Nobody else combines A with B は「他に誰もAとBを組み合わせていない」という nobody 主語の全否定構文。自社の独自性を最大限に強調できる。'
+      },
+      {
+        grammar: '関係副詞 how',
+        jp: 'うちが出版社にどんな価値を届けられるかを説明するとき、翻訳の正確さだけじゃなくて、文化的オーセンティシティと読者エンゲージメントも軸に持ってきたいんですよね。',
+        hint: '「どんな価値を届けられるか」を関係副詞 how で表現しましょう。',
+        context: 'クライアントへの価値提案をチームで練っている場面',
+        model: "How we articulate our value to publishers should go beyond translation accuracy to include cultural authenticity and reader engagement.",
+        vocab: [
+          { term: 'How we articulate our value', desc: '「私たちが価値をどのように伝えるか」。how の名詞節が主語になるパターン。' },
+          { term: 'go beyond ~ to include ~', desc: '「〜を超えて〜まで含める」。価値提案を広げるときの表現。' }
+        ],
+        grammar_tip: 'How SV should go ~ という構文で「SVがどうあるべきか」という方向性を示せる。how の名詞節が主語になるパターン。'
+      },
+      {
+        grammar: '関係代名詞 what（目的格）',
+        jp: 'うちが出版社に本当に提供しているのって、翻訳サービスというよりも、日本のIPが世界の読者の心に届くための文化的な橋渡しなんですよ。',
+        hint: '関係代名詞 what で「自社の本質的な価値」をピッチの締めくくりとして表現しましょう。',
+        context: 'ピッチの締めくくりで自社の価値を凝縮して伝えている場面',
+        model: "What we truly offer publishers isn't just a translation service — it's a cultural bridge that carries Japanese IP into the hearts of global readers.",
+        vocab: [
+          { term: 'What we truly offer', desc: '「私たちが真に提供するもの」。what を主語にした強調構文。' },
+          { term: 'cultural bridge', desc: '「文化的な橋渡し」。localization の本質を詩的に表現したフレーズ。' }
+        ],
+        grammar_tip: "What we truly offer is ~ は「私たちが真に提供するものは〜だ」という強調構文。What を使った関係代名詞構文でピッチの核心メッセージを届けるパターン。"
+      }
+    ]
   }
 ];
 
