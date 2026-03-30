@@ -66,14 +66,23 @@
   .ss-num.no-review { color: var(--success); }
 
   /* ── Topic List on Start Screen ── */
-  .topic-group { margin-bottom: 16px; }
-  .topic-group-hd { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 7px; display: flex; align-items: center; gap: 8px; }
-  .topic-group-hd::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .topic-group { margin-bottom: 10px; }
+  .topic-group-hd { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 9px 12px; display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; transition: background 0.2s; }
+  .topic-group-hd:hover { background: var(--surface2); }
+  .topic-group.open .topic-group-hd { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom-color: transparent; }
   .topic-group-hd.us { color: var(--accent2); }
   .topic-group-hd.jp { color: var(--accent); }
   .topic-group-hd.strategy { color: var(--success); }
-  .topic-row { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 5px; cursor: pointer; transition: border-color 0.2s, background 0.2s; }
-  .topic-row:hover { border-color: rgba(232,201,122,0.5); background: var(--surface2); }
+  .grp-spacer { flex: 1; }
+  .grp-summary { font-size: 10px; color: var(--text-muted); font-weight: 400; letter-spacing: 0; text-transform: none; flex-shrink: 0; }
+  .grp-summary.grp-done { color: var(--success); }
+  .grp-toggle { font-size: 10px; color: var(--text-muted); transition: transform 0.2s; flex-shrink: 0; }
+  .topic-group.open .grp-toggle { transform: rotate(180deg); }
+  .topic-group-body { display: none; border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; overflow: hidden; }
+  .topic-group.open .topic-group-body { display: block; }
+  .topic-row { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: var(--surface); border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.2s; }
+  .topic-row:last-child { border-bottom: none; }
+  .topic-row:hover { background: var(--surface2); }
   .topic-row-name { flex: 1; font-size: 13px; color: var(--text); }
   .topic-row-dots { display: flex; gap: 3px; flex-shrink: 0; }
   .sdot { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--border); display: inline-block; }
@@ -130,6 +139,13 @@
   .fb-section-title.vocab { color: var(--accent); }
   .fb-section-title.grammar { color: var(--success); }
   .fb-section-title.next { color: var(--text-muted); }
+  .fb-section-title.rewrite { color: var(--warning); }
+  .rewrite-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+  .rewrite-loading { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 13px; }
+  .rewrite-original { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.5; }
+  .rewrite-original-label { font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; font-size: 10px; margin-right: 6px; }
+  .rewrite-suggested { font-size: 14px; color: var(--warning); line-height: 1.6; font-weight: 500; margin-bottom: 8px; }
+  .rewrite-tip { font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 8px; line-height: 1.5; }
   .model-answer { background: var(--surface2); border-radius: 8px; padding: 10px 13px; font-size: 15px; color: var(--text); line-height: 1.6; border-left: 3px solid var(--accent2); }
   .vocab-list { display: flex; flex-direction: column; gap: 6px; }
   .vocab-item { background: var(--surface2); border-radius: 8px; padding: 8px 12px; border-left: 3px solid var(--accent); }
@@ -393,7 +409,22 @@
         <div class="model-answer" id="fb-model"></div>
       </div>
 
-      <!-- ③ 表現・単語の解説 -->
+      <!-- ③ 口語化の提案 -->
+      <div class="fb-section" id="rewrite-section" style="display:none">
+        <div class="fb-section-title rewrite">✏️ あなたの文を口語調に</div>
+        <div class="rewrite-box">
+          <div class="rewrite-loading" id="rewrite-loading" style="display:none">
+            <span class="loading-dots"><span></span><span></span><span></span></span>口語化を提案中...
+          </div>
+          <div id="rewrite-content" style="display:none">
+            <div class="rewrite-original"><span class="rewrite-original-label">元の文</span><span id="rewrite-original-text"></span></div>
+            <div class="rewrite-suggested" id="rewrite-suggested-text"></div>
+            <div class="rewrite-tip" id="rewrite-tip-text"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ④ 表現・単語の解説 -->
       <div class="fb-section" id="vocab-section">
         <div class="fb-section-title vocab">📌 表現・単語の解説</div>
         <div class="vocab-list" id="vocab-list"></div>
@@ -2055,6 +2086,47 @@ async function aiScore(userAnswer, step) {
   }
 }
 
+async function aiSuggestRewrite(userAnswer, step) {
+  const apiKey = getApiKey();
+  if (!apiKey) return null;
+
+  const prompt = `英語口語トレーニングの学習者の回答を、より自然な口語表現に書き直してください。
+
+問題（日本語）: ${step.jp}
+学習者の回答: ${userAnswer}
+
+以下のJSON形式のみで回答してください（他のテキスト不要）:
+{"rewrite": "口語的に書き直した英文（1〜2文）", "tip": "変更のポイントを日本語で一言（20字以内）"}
+
+ルール:
+- 意味・内容は変えない
+- よりカジュアルで話し言葉らしい表現に
+- 完全に正しい場合は学習者の文をそのままrewriteに入れてtipに「自然な口語表現です！」と書く`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 150,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text?.trim() || '';
+    const json = JSON.parse(text.match(/\{[\s\S]*\}/)?.[0] || '{}');
+    return { rewrite: json.rewrite || null, tip: json.tip || null };
+  } catch(e) {
+    return null;
+  }
+}
+
 // ══════════════════════════════════════════
 // STORAGE
 // ══════════════════════════════════════════
@@ -2151,6 +2223,7 @@ let currentTopic = null;
 let currentStep = 0;
 let currentQuestionId = null;
 let isReviewMode = false;
+let openGroups = new Set();
 let reviewQueue = [];
 let reviewIndex = 0;
 let sessionData = { topic: '', stepsCompleted: 0, grammarPatterns: new Set() };
@@ -2169,12 +2242,50 @@ function showScreen(id) {
 // ══════════════════════════════════════════
 // START SCREEN INIT
 // ══════════════════════════════════════════
+function toggleGroup(key) {
+  if (openGroups.has(key)) {
+    openGroups.delete(key);
+  } else {
+    openGroups.add(key);
+  }
+  const el = document.querySelector(`.topic-group[data-key="${key}"]`);
+  if (el) el.classList.toggle('open', openGroups.has(key));
+}
+
 function renderTopicList(scores, personalAvg) {
   const container = document.getElementById('topic-list-container');
   let html = '';
   TOPIC_GROUPS.forEach(group => {
-    html += `<div class="topic-group">`;
-    html += `<div class="topic-group-hd ${group.key}">${group.label}</div>`;
+    // Calculate group-level summary
+    let grpDone = 0, grpTotal = group.ids.length, grpScoreSum = 0, grpScored = 0;
+    group.ids.forEach(id => {
+      const topic = TOPICS.find(t => t.id === id);
+      if (!topic) return;
+      const hasAny = topic.steps.some((_, i) => (scores[id + '_' + i] || []).length > 0);
+      if (hasAny) {
+        grpDone++;
+        let totalScore = 0, count = 0;
+        topic.steps.forEach((_, i) => {
+          const attempts = scores[id + '_' + i] || [];
+          if (attempts.length) { totalScore += getRolling3Avg(attempts); count++; }
+        });
+        if (count) { grpScoreSum += Math.round(totalScore / count); grpScored++; }
+      }
+    });
+    const grpAvg = grpScored > 0 ? Math.round(grpScoreSum / grpScored) : null;
+    const summaryText = grpDone > 0
+      ? `${grpDone}/${grpTotal}` + (grpAvg !== null ? ` · ${grpAvg}%` : '')
+      : `${grpTotal}トピック`;
+    const isOpen = openGroups.has(group.key);
+
+    html += `<div class="topic-group${isOpen ? ' open' : ''}" data-key="${group.key}">`;
+    html += `<div class="topic-group-hd ${group.key}" onclick="toggleGroup('${group.key}')">
+      ${group.label}
+      <span class="grp-spacer"></span>
+      <span class="grp-summary${grpDone === grpTotal && grpDone > 0 ? ' grp-done' : ''}">${summaryText}</span>
+      <span class="grp-toggle">▾</span>
+    </div>`;
+    html += `<div class="topic-group-body">`;
     group.ids.forEach(id => {
       const topic = TOPICS.find(t => t.id === id);
       if (!topic) return;
@@ -2198,7 +2309,7 @@ function renderTopicList(scores, personalAvg) {
         <span class="topic-row-score${avg !== null ? ' scored' : ''}">${avg !== null ? avg + '%' : '―'}</span>
       </div>`;
     });
-    html += `</div>`;
+    html += `</div></div>`;
   });
   container.innerHTML = html;
 }
@@ -2347,6 +2458,9 @@ function renderStepContent() {
   document.getElementById('ai-feedback-box').style.display = 'none';
   document.getElementById('ai-feedback-box').textContent = '';
   document.getElementById('ai-score-label').style.display = 'none';
+  document.getElementById('rewrite-section').style.display = 'none';
+  document.getElementById('rewrite-loading').style.display = 'none';
+  document.getElementById('rewrite-content').style.display = 'none';
 
   // Show previous score history
   renderScoreHistory();
@@ -2432,10 +2546,15 @@ function submitAnswer() {
     { role: 'assistant', content: 'はい、何でも聞いてください！' }
   ];
 
-  // AI scoring
+  // AI scoring + rewrite suggestion (parallel)
   if (getApiKey()) {
     document.getElementById('ai-score-loading').style.display = 'block';
     document.getElementById('score-main').style.display = 'none';
+    // Show rewrite section with loading state
+    document.getElementById('rewrite-section').style.display = 'block';
+    document.getElementById('rewrite-loading').style.display = 'flex';
+    document.getElementById('rewrite-content').style.display = 'none';
+
     aiScore(answer, step).then(result => {
       document.getElementById('ai-score-loading').style.display = 'none';
       document.getElementById('score-main').style.display = 'block';
@@ -2452,7 +2571,20 @@ function submitAnswer() {
       }
       recordScore();
     });
+
+    aiSuggestRewrite(answer, step).then(result => {
+      document.getElementById('rewrite-loading').style.display = 'none';
+      if (result?.rewrite) {
+        document.getElementById('rewrite-original-text').textContent = answer;
+        document.getElementById('rewrite-suggested-text').textContent = result.rewrite;
+        document.getElementById('rewrite-tip-text').textContent = result.tip || '';
+        document.getElementById('rewrite-content').style.display = 'block';
+      } else {
+        document.getElementById('rewrite-section').style.display = 'none';
+      }
+    });
   } else {
+    document.getElementById('rewrite-section').style.display = 'none';
     recordScore();
   }
 }
