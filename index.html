@@ -990,12 +990,16 @@ function submitAnswer() {
     aiScore(answer, step).then(score => {
       document.getElementById('ai-score-loading').style.display = 'none';
       document.getElementById('score-main').style.display = 'block';
+      const finalScore = score !== null ? score : 70;
+      document.getElementById('score-slider').value = finalScore;
+      document.getElementById('score-display-num').textContent = finalScore;
       if (score !== null) {
-        document.getElementById('score-slider').value = score;
-        document.getElementById('score-display-num').textContent = score;
         document.getElementById('ai-score-label').style.display = 'block';
       }
+      recordScore();
     });
+  } else {
+    recordScore();
   }
 }
 
