@@ -53,6 +53,16 @@
   .btn-ghost:hover { border-color: var(--text-muted); color: var(--text); }
   .start-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 
+  /* ── Progress Summary on Start Screen ── */
+  .progress-summary { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; text-align: left; }
+  .ps-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
+  .ps-title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+  .ps-fraction { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--accent); }
+  .ps-fraction .ps-denom { font-size: 13px; color: var(--text-muted); font-family: 'DM Sans', sans-serif; }
+  .ps-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
+  .ps-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 3px; transition: width 0.6s ease; }
+  .ps-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
+
   /* ── Stats pill on start screen ── */
   .stats-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 20px; margin-bottom: 20px; display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
   .stat-item { text-align: center; }
@@ -281,6 +291,18 @@
       <div class="stat-item"><div class="stat-num" id="ss-avg">―</div><div class="stat-label">個人平均</div></div>
       <div class="stat-item"><div class="stat-num" id="ss-attempts">―</div><div class="stat-label">総回答数</div></div>
       <div class="stat-item"><div class="stat-num" id="ss-review">―</div><div class="stat-label">復習対象</div></div>
+    </div>
+
+    <div class="progress-summary">
+      <div class="ps-header">
+        <span class="ps-title">学習進捗</span>
+        <div class="ps-fraction"><span id="ps-done">0</span><span class="ps-denom"> / <span id="ps-total">―</span>問 完了</span></div>
+      </div>
+      <div class="ps-track"><div class="ps-fill" id="ps-fill" style="width:0%"></div></div>
+      <div class="ps-meta">
+        <span id="ps-topic-stat">― / ― トピック</span>
+        <span id="ps-pct">0%</span>
+      </div>
     </div>
 
     <div class="doc-preview">
@@ -2132,6 +2154,17 @@ function initStartScreen() {
   const personalAvg = getPersonalAverage(scores);
   const allAttempts = getAllAttempts(scores);
   const reviewQueue = getReviewQueue(scores);
+
+  // Progress summary (always shown)
+  const totalQ = TOPICS.reduce((s, t) => s + t.steps.length, 0);
+  const doneQ = Object.keys(scores).length;
+  const pct = totalQ > 0 ? Math.round(doneQ / totalQ * 100) : 0;
+  const doneTopics = TOPICS.filter(t => t.steps.some((_, i) => scores[t.id + '_' + i])).length;
+  document.getElementById('ps-total').textContent = totalQ;
+  document.getElementById('ps-done').textContent = doneQ;
+  document.getElementById('ps-pct').textContent = pct + '%';
+  document.getElementById('ps-fill').style.width = pct + '%';
+  document.getElementById('ps-topic-stat').textContent = doneTopics + ' / ' + TOPICS.length + ' トピック挑戦済み';
 
   if (allAttempts.length > 0) {
     document.getElementById('start-stats-pill').style.display = 'flex';
