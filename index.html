@@ -978,7 +978,10 @@ function submitAnswer() {
   document.getElementById('next-btn').textContent = isLastStep ? 'セット完了 🎉' : '次のステップへ →';
   document.getElementById('feedback-card').classList.add('show');
 
-  qaContext = [{ role: 'user', content: `問題: ${step.jp}\n模範解答: ${step.model}\n私の回答: ${answer}` }];
+  qaContext = [
+    { role: 'user', content: `問題: ${step.jp}\n模範解答: ${step.model}\n私の回答: ${answer}` },
+    { role: 'assistant', content: 'はい、何でも聞いてください！' }
+  ];
 
   // AI scoring
   if (getApiKey()) {
@@ -1051,7 +1054,6 @@ async function sendQuestion() {
 
   const messages = [
     ...qaContext,
-    { role: 'assistant', content: 'はい、何でも聞いてください！' },
     { role: 'user', content: question }
   ];
 
@@ -1078,7 +1080,6 @@ async function sendQuestion() {
     const reply = data.content.map(b => b.text || '').join('').trim();
     aiBubble.textContent = reply;
     qaContext.push(
-      { role: 'assistant', content: 'はい、何でも聞いてください！' },
       { role: 'user', content: question },
       { role: 'assistant', content: reply }
     );
