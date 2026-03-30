@@ -53,15 +53,34 @@
   .btn-ghost:hover { border-color: var(--text-muted); color: var(--text); }
   .start-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 
-  /* ── Progress Summary on Start Screen ── */
-  .progress-summary { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; text-align: left; }
-  .ps-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
-  .ps-title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
-  .ps-fraction { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--accent); }
-  .ps-fraction .ps-denom { font-size: 13px; color: var(--text-muted); font-family: 'DM Sans', sans-serif; }
-  .ps-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
-  .ps-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 3px; transition: width 0.6s ease; }
-  .ps-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
+  /* ── Summary Strip on Start Screen ── */
+  .summary-strip { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; overflow: hidden; }
+  .ss-item { flex: 1; padding: 14px 10px; text-align: center; border-right: 1px solid var(--border); }
+  .ss-item:last-child { border-right: none; }
+  .ss-num { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--accent); line-height: 1; }
+  .ss-denom { font-size: 12px; color: var(--text-muted); font-family: 'DM Sans', sans-serif; }
+  .ss-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 4px; }
+  .ss-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 8px; }
+  .ss-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; transition: width 0.6s ease; }
+  .ss-num.needs-review { color: var(--warning); }
+  .ss-num.no-review { color: var(--success); }
+
+  /* ── Topic List on Start Screen ── */
+  .topic-group { margin-bottom: 16px; }
+  .topic-group-hd { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 7px; display: flex; align-items: center; gap: 8px; }
+  .topic-group-hd::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .topic-group-hd.us { color: var(--accent2); }
+  .topic-group-hd.jp { color: var(--accent); }
+  .topic-group-hd.strategy { color: var(--success); }
+  .topic-row { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 5px; cursor: pointer; transition: border-color 0.2s, background 0.2s; }
+  .topic-row:hover { border-color: rgba(232,201,122,0.5); background: var(--surface2); }
+  .topic-row-name { flex: 1; font-size: 13px; color: var(--text); }
+  .topic-row-dots { display: flex; gap: 3px; flex-shrink: 0; }
+  .sdot { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--border); display: inline-block; }
+  .sdot.done { background: var(--success); border-color: var(--success); }
+  .sdot.needs-review { background: var(--warning); border-color: var(--warning); }
+  .topic-row-score { font-size: 12px; min-width: 32px; text-align: right; color: var(--text-muted); flex-shrink: 0; }
+  .topic-row-score.scored { color: var(--accent); font-weight: 600; }
 
   /* ── Stats pill on start screen ── */
   .stats-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 20px; margin-bottom: 20px; display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
@@ -287,31 +306,23 @@
     <h1 class="hero-title">口語英語を<br><em>鍛える</em></h1>
     <p class="hero-sub">ビジネスドキュメントを素材に、<br>ネイティブが使う口語表現を段階的にトレーニング。</p>
 
-    <div class="stats-pill" id="start-stats-pill" style="display:none">
-      <div class="stat-item"><div class="stat-num" id="ss-avg">―</div><div class="stat-label">個人平均</div></div>
-      <div class="stat-item"><div class="stat-num" id="ss-attempts">―</div><div class="stat-label">総回答数</div></div>
-      <div class="stat-item"><div class="stat-num" id="ss-review">―</div><div class="stat-label">復習対象</div></div>
-    </div>
-
-    <div class="progress-summary">
-      <div class="ps-header">
-        <span class="ps-title">学習進捗</span>
-        <div class="ps-fraction"><span id="ps-done">0</span><span class="ps-denom"> / <span id="ps-total">―</span>問 完了</span></div>
+    <div class="summary-strip">
+      <div class="ss-item">
+        <div class="ss-num"><span id="ss-sessions-done">0</span><span class="ss-denom">/<span id="ss-sessions-total">22</span></span></div>
+        <div class="ss-label">セッション完了</div>
+        <div class="ss-bar"><div class="ss-bar-fill" id="ss-bar-fill" style="width:0%"></div></div>
       </div>
-      <div class="ps-track"><div class="ps-fill" id="ps-fill" style="width:0%"></div></div>
-      <div class="ps-meta">
-        <span id="ps-topic-stat">― / ― トピック</span>
-        <span id="ps-pct">0%</span>
+      <div class="ss-item">
+        <div class="ss-num" id="ss-review">―</div>
+        <div class="ss-label">復習が必要</div>
+      </div>
+      <div class="ss-item">
+        <div class="ss-num" id="ss-avg">―</div>
+        <div class="ss-label">平均スコア</div>
       </div>
     </div>
 
-    <div class="doc-preview">
-      <div class="doc-preview-label">📂 読み込み済みドキュメント</div>
-      <ul class="doc-list">
-        <li><strong>Competitive Analysis: US Localization Services</strong> — Lionbridge, Iyuno, Welocalize 他</li>
-        <li><strong>Competitive Analysis: Japan Companies</strong> — MediBang TraDe, Active Gaming Media 他</li>
-      </ul>
-    </div>
+    <div id="topic-list-container" style="width:100%;text-align:left;margin-bottom:16px"></div>
 
     <div class="start-actions">
       <button class="btn-main" onclick="startTraining(false)">トレーニング開始 →</button>
@@ -1955,6 +1966,15 @@ const TOPICS = [
 ];
 
 // ══════════════════════════════════════════
+// TOPIC GROUPS (document source mapping)
+// ══════════════════════════════════════════
+const TOPIC_GROUPS = [
+  { key: 'us',       label: 'US Companies',  ids: ['lionbridge','iyuno','welocalize','blend','propio'] },
+  { key: 'jp',       label: 'Japan Companies', ids: ['abracadabra','medibang','agm','deden','mantra_orange','arc_comms','animate_moat'] },
+  { key: 'strategy', label: '市場分析・戦略', ids: ['three_layer','lsp_market','ai_commoditization','ma_consolidation','fiction_wedge','quality_positioning','translator_market','latam_expansion','hybrid_workflow','pitch_practice'] },
+];
+
+// ══════════════════════════════════════════
 // API KEY MANAGEMENT
 // ══════════════════════════════════════════
 function getApiKey() {
@@ -2149,29 +2169,61 @@ function showScreen(id) {
 // ══════════════════════════════════════════
 // START SCREEN INIT
 // ══════════════════════════════════════════
+function renderTopicList(scores, personalAvg) {
+  const container = document.getElementById('topic-list-container');
+  let html = '';
+  TOPIC_GROUPS.forEach(group => {
+    html += `<div class="topic-group">`;
+    html += `<div class="topic-group-hd ${group.key}">${group.label}</div>`;
+    group.ids.forEach(id => {
+      const topic = TOPICS.find(t => t.id === id);
+      if (!topic) return;
+      let dots = '';
+      let totalScore = 0, scoredCount = 0;
+      topic.steps.forEach((_, i) => {
+        const attempts = scores[id + '_' + i] || [];
+        if (!attempts.length) {
+          dots += '<span class="sdot"></span>';
+        } else {
+          const rolling = getRolling3Avg(attempts);
+          const nr = personalAvg !== null && rolling < personalAvg;
+          dots += `<span class="sdot ${nr ? 'needs-review' : 'done'}"></span>`;
+          totalScore += rolling; scoredCount++;
+        }
+      });
+      const avg = scoredCount > 0 ? Math.round(totalScore / scoredCount) : null;
+      html += `<div class="topic-row" onclick="startTrainingTopic('${id}')">
+        <span class="topic-row-name">${topic.label}</span>
+        <span class="topic-row-dots">${dots}</span>
+        <span class="topic-row-score${avg !== null ? ' scored' : ''}">${avg !== null ? avg + '%' : '―'}</span>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  container.innerHTML = html;
+}
+
 function initStartScreen() {
   const scores = getScores();
   const personalAvg = getPersonalAverage(scores);
-  const allAttempts = getAllAttempts(scores);
   const reviewQueue = getReviewQueue(scores);
 
-  // Progress summary (always shown)
-  const totalQ = TOPICS.reduce((s, t) => s + t.steps.length, 0);
-  const doneQ = Object.keys(scores).length;
-  const pct = totalQ > 0 ? Math.round(doneQ / totalQ * 100) : 0;
-  const doneTopics = TOPICS.filter(t => t.steps.some((_, i) => scores[t.id + '_' + i])).length;
-  document.getElementById('ps-total').textContent = totalQ;
-  document.getElementById('ps-done').textContent = doneQ;
-  document.getElementById('ps-pct').textContent = pct + '%';
-  document.getElementById('ps-fill').style.width = pct + '%';
-  document.getElementById('ps-topic-stat').textContent = doneTopics + ' / ' + TOPICS.length + ' トピック挑戦済み';
+  // Summary strip
+  const totalSessions = TOPICS.length;
+  const doneSessions = TOPICS.filter(t => t.steps.some((_, i) => scores[t.id + '_' + i])).length;
+  const pct = totalSessions > 0 ? Math.round(doneSessions / totalSessions * 100) : 0;
+  document.getElementById('ss-sessions-done').textContent = doneSessions;
+  document.getElementById('ss-sessions-total').textContent = totalSessions;
+  document.getElementById('ss-bar-fill').style.width = pct + '%';
+  const reviewEl = document.getElementById('ss-review');
+  reviewEl.textContent = reviewQueue.length || '―';
+  if (reviewQueue.length > 0) reviewEl.classList.add('needs-review');
+  else if (doneSessions > 0) reviewEl.classList.add('no-review');
+  const avgEl = document.getElementById('ss-avg');
+  avgEl.textContent = personalAvg !== null ? personalAvg + '%' : '―';
 
-  if (allAttempts.length > 0) {
-    document.getElementById('start-stats-pill').style.display = 'flex';
-    document.getElementById('ss-avg').textContent = personalAvg + '%';
-    document.getElementById('ss-attempts').textContent = allAttempts.length;
-    document.getElementById('ss-review').textContent = reviewQueue.length;
-  }
+  // Topic list
+  renderTopicList(scores, personalAvg);
 
   const saved = getProgress();
   if (saved) {
@@ -2192,6 +2244,16 @@ function initStartScreen() {
 // ══════════════════════════════════════════
 // TRAINING FLOW
 // ══════════════════════════════════════════
+function startTrainingTopic(topicId) {
+  isReviewMode = false;
+  clearProgress();
+  currentTopic = TOPICS.find(t => t.id === topicId);
+  currentStep = 0;
+  sessionData = { topic: currentTopic.label, stepsCompleted: 0, grammarPatterns: new Set() };
+  showScreen('training-screen');
+  renderStep();
+}
+
 function startTraining(resume) {
   isReviewMode = false;
   if (resume) {
