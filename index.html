@@ -606,6 +606,339 @@ const TOPICS = [
         grammar_tip: '"where we really win is ~" は強調構文の口語バージョン。Honestly を文頭に置くと話し言葉のリアリティが増す。'
       }
     ]
+  },
+  {
+    id: 'medibang',
+    label: 'MediBang TraDe',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'MediBangトレードって、翻訳からDTP、世界100以上のストアへの流通まで一気通貫でやってくれる東京の会社なんですよ。',
+        hint: '会社の特徴をシンプルに一文で。',
+        context: '競合他社を同僚に紹介している場面',
+        model: 'MediBang TraDe is a Tokyo-based company that handles everything from translation and typesetting to global distribution across 100+ stores.',
+        vocab: [
+          { term: 'handles everything from A to B', desc: '「AからBまで全部担う」という口語表現。covers everything from A to B とも言える。' },
+          { term: 'global distribution', desc: '「グローバル流通・配信」。ビジネスで頻出の表現。' }
+        ],
+        grammar_tip: '会社の特徴を一文で伝える基本パターン。that節で情報を追加するのが自然。'
+      },
+      {
+        grammar: '現在完了形',
+        jp: '1万タイトル以上ローカライズしてきた実績があって、集英社のMANGA Plusとも取引してるんですよ。',
+        hint: '実績を現在完了で伝えましょう。',
+        context: 'MediBangの規模感を説明している場面',
+        model: "They've localized over 10,000 titles and work with major publishers like Shueisha's MANGA Plus.",
+        vocab: [
+          { term: "They've localized", desc: '現在完了で「これまでに〜してきた」実績を表す。have の短縮形。' },
+          { term: 'work with ~', desc: '「〜と取引・協業している」。partner with よりカジュアルで口語的。' }
+        ],
+        grammar_tip: "have + 過去分詞 で過去から現在への実績を表す。They've = They have の短縮形。"
+      },
+      {
+        grammar: '対比接続詞 while',
+        jp: 'MediBangは量とスピードには強いんですけど、翻訳者への報酬が安すぎるって業界で批判されてるんですよね。',
+        hint: '強みと問題点を対比させましょう。',
+        context: '競合の強みと弱みを分析している場面',
+        model: "While MediBang is strong on volume and speed, they've faced real criticism for paying translators way below market rate.",
+        vocab: [
+          { term: 'strong on ~', desc: '「〜が得意・強み」。good at でも通じるがビジネス的には strong on の方が自然。' },
+          { term: 'way below market rate', desc: '「市場水準をはるかに下回る」。way は副詞で「はるかに」を強調する口語表現。' }
+        ],
+        grammar_tip: 'While A, B. で「Aの一方でBは〜」という対比を表す。プレゼンや競合分析で頻出の構文。'
+      },
+      {
+        grammar: 'not as … as SV',
+        jp: 'MediBangの翻訳単価って、業界標準の6分の1くらいで、プロとして求められる水準にはとても及ばないですよね。',
+        hint: '業界標準との比較を否定形で表現しましょう。',
+        context: '競合の料金体系の問題点を説明している場面',
+        model: "Their per-page rates are nowhere near as competitive as what professional publishers actually pay — we're talking about a sixth of the market standard.",
+        vocab: [
+          { term: 'nowhere near as ~ as', desc: '「〜と程遠い」という強調否定。not as ~ as のさらに強い版。' },
+          { term: "we're talking about ~", desc: '「〜の話なんですよ」と数字・事実を強調する口語表現。' }
+        ],
+        grammar_tip: 'not as ... as で「〜ほど〜ではない」という比較否定。nowhere near as ... as にすると「まったく及ばない」というより強い否定になる。'
+      },
+      {
+        grammar: '接続詞＋関係代名詞の複合',
+        jp: '規模と流通網はすごいんですけど、低コスト優先のモデルが品質の上限を作っていて、優秀な翻訳者がMediBangを避けている中で、うちはAnimateグループがあるので採用面でも有利なんですよ。',
+        hint: '複数の要因を組み合わせた分析を1〜2文でまとめましょう。',
+        context: '競合分析のまとめを説明している場面',
+        model: "Their scale and distribution are impressive, but the low-cost model creates a quality ceiling — and with top translators actively avoiding them, our Animate Group connection gives us a real edge in talent acquisition.",
+        vocab: [
+          { term: 'quality ceiling', desc: '「品質の上限・天井」。構造的な制約を表すビジネス表現。' },
+          { term: 'talent acquisition', desc: '「人材採用・確保」。recruiting よりフォーマルなビジネス用語。' },
+          { term: 'gives us a real edge', desc: '「本当の強みを与えてくれる」。gives us an advantage の口語版。' }
+        ],
+        grammar_tip: 'but と and を組み合わせて対比と追加情報を一文に詰め込む複合文。ビジネス分析の締めくくりで使えるパターン。'
+      }
+    ]
+  },
+  {
+    id: 'agm',
+    label: 'Active Gaming Media',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'Active Gaming Mediaって、2008年設立で、日本で最初にゲームローカライズ専門でやり始めた会社として知られてるんですよ。',
+        hint: '会社の基本情報をシンプルに伝えましょう。',
+        context: 'AGMを同僚に紹介している場面',
+        model: "Active Gaming Media, or AGM, was founded in 2008 and is known as Japan's first company specializing in game localization.",
+        vocab: [
+          { term: 'is known as ~', desc: '「〜として知られている」。業界での定義・認識を伝えるニュアンス。be famous for と違い事実を述べる感じ。' },
+          { term: 'specializing in ~', desc: 'specialize in の現在分詞形で名詞を修飾。「〜専門の」。' }
+        ],
+        grammar_tip: '会社の創設背景と特徴を一文で伝えるシンプルな現在形パターン。'
+      },
+      {
+        grammar: '分詞構文',
+        jp: '4000人以上のフリーランス翻訳者プールを活かしながら、ゲームのジャンルに合わせてチームを組成してるんですよね。',
+        hint: '強みを活かしながら〜している、という表現を分詞構文で。',
+        context: 'AGMの業務体制を説明している場面',
+        model: 'Leveraging a pool of 4,000+ freelancers, they curate teams by content genre so each series stays consistent across volumes.',
+        vocab: [
+          { term: 'Leveraging ~', desc: '「〜を活かして・活用して」。using よりビジネス的な表現。' },
+          { term: 'curate teams', desc: '「チームを選定・組成する」。select よりも「質を見極めて選ぶ」ニュアンス。' }
+        ],
+        grammar_tip: 'Leveraging ~ で始まる分詞構文は「〜を活かしながら」という意味。会社の強みを説明するときによく使われる。'
+      },
+      {
+        grammar: 'so that SV（目的）',
+        jp: 'シリーズものは同じ翻訳チームが担当できるようにしていて、それで用語やトーンの一貫性が保てるんですよ。',
+        hint: '「〜できるように〜している」という目的の表現を使いましょう。',
+        context: 'AGMの品質管理の仕組みを説明している場面',
+        model: 'They keep the same translator team on a series so that the tone and terminology stay consistent across every volume.',
+        vocab: [
+          { term: 'so that SV', desc: '「〜できるように」という目的を表す構文。in order that と同義だが口語的。' },
+          { term: 'tone and terminology', desc: '「トーンと用語」。翻訳の一貫性を表す際のビジネス表現。' }
+        ],
+        grammar_tip: 'so that SV で「〜できるように・〜するために」という目的を表す。in order to との違いは後ろに主語＋動詞（SV）が来ること。'
+      },
+      {
+        grammar: '関係代名詞 what（主格）',
+        jp: 'AGMが本当に得意なのはゲームで、マンガや小説は後付けのサービスって感じなんですよね。',
+        hint: '関係代名詞 what を主語にして核心を強調しましょう。',
+        context: 'AGMの強み・弱みを分析している場面',
+        model: "What AGM really excels at is game localization — manga and fiction are more of an add-on than a core strength.",
+        vocab: [
+          { term: 'What SV excels at is ~', desc: '「SVが本当に得意なのは〜だ」という強調構文。関係代名詞 what の主格用法。' },
+          { term: 'add-on', desc: '「後付け・おまけ的な追加」。本業ではない付随サービスを指す口語表現。' }
+        ],
+        grammar_tip: 'What SV is ~ は関係代名詞 what の強調構文。「〜がやっていること/得意なことは〜だ」と核心を際立たせるときに使う。ビジネスでの分析表現として非常に便利。'
+      },
+      {
+        grammar: '接続詞＋関係代名詞の複合',
+        jp: 'ゲームで17年の信頼と実績があるんですけど、マンガ・小説に関してはAnimateグループとのつながりもAIツールの活用もないので、うちとの差別化はかなりはっきりしてますよね。',
+        hint: '複数の対比ポイントを組み合わせてまとめましょう。',
+        context: '競合分析のまとめを説明している場面',
+        model: "They bring 17 years of credibility in games, but when it comes to manga and fiction, they don't have our Animate Group connection or any AI integration — which makes our differentiation pretty clear.",
+        vocab: [
+          { term: 'bring ~ years of credibility', desc: '「〜年の信頼・実績を持っている」。have よりビジネスピッチで使いやすい。' },
+          { term: 'when it comes to ~', desc: '「〜に関しては」という口語の定番フレーズ。' },
+          { term: 'which makes ~ clear', desc: '前の節全体を受けて「それが〜を明確にする」という非制限用法の関係代名詞。' }
+        ],
+        grammar_tip: 'but と which を組み合わせて対比と結論を一文で伝える複合構文。which makes ~ は前の節全体を受ける関係代名詞の非制限用法。'
+      }
+    ]
+  },
+  {
+    id: 'three_layer',
+    label: 'マーケット3層構造',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'マンガ・小説のローカライズ市場って、インフラ・サービス・流通の3つの層に分かれてるんですよ。',
+        hint: '市場の構造をシンプルに定義しましょう。',
+        context: '市場構造をチームや投資家に初めて説明する場面',
+        model: 'The manga and fiction localization market operates across three distinct layers — infrastructure, services, and distribution.',
+        vocab: [
+          { term: 'operates across ~', desc: '「〜にまたがって機能・構成されている」。works in より構造的なニュアンスが出る。' },
+          { term: 'distinct layers', desc: '「明確に区分された層」。separate よりフォーマルでビジネス的。' }
+        ],
+        grammar_tip: '市場の構造を定義するシンプルな現在形。operates across ... でビジネス解説の定番パターン。ダッシュ（—）で具体例を追加すると口語的に聞こえる。'
+      },
+      {
+        grammar: '関係副詞 where（場所以外）',
+        jp: 'うちが本当に勝負しているのはLayer 2、つまり文化的な判断力と編集品質の部分で、そこはAIじゃカバーできないんですよね。',
+        hint: '「〜が行われる領域」を関係副詞 where で表現しましょう。',
+        context: '自社の競争領域を説明している場面',
+        model: "Layer 2 is where we actually compete — on cultural judgment and editorial quality, which is exactly where AI falls short.",
+        vocab: [
+          { term: 'where we compete', desc: '関係副詞 where の比喩的用法。物理的な場所だけでなく「競争が起きる領域」など抽象的な場面でも使える。' },
+          { term: 'falls short', desc: '「及ばない・不十分」。不足を表す口語イディオム。comes up short とも言える。' }
+        ],
+        grammar_tip: '〜 is where SV は関係副詞 where の比喩的用法。「〜が起きる領域・場面」を表す。場所だけでなく「競争領域」「課題が発生する局面」など抽象的な文脈でも自然に使える。'
+      },
+      {
+        grammar: '仮定法過去',
+        jp: 'もしMantraやOrangeを競合として扱ってしまったら、本当のライバルであるMediBangやAGMへの対策がおろそかになってしまうんですよね。',
+        hint: '「もし〜したら〜になってしまう」という仮定法で表現しましょう。',
+        context: '市場分析での戦略的な示唆を説明している場面',
+        model: "If we treated Mantra and Orange as competitors, we'd be taking our eye off the real rivals — MediBang and AGM.",
+        vocab: [
+          { term: 'If we treated ~ as ~', desc: '仮定法過去。「もし〜を〜として扱ったとしたら」という現実に反する仮定。' },
+          { term: "taking our eye off ~", desc: '「〜から目を離す・見落とす」という口語イディオム。take one\'s eye off the ball とも言う。' }
+        ],
+        grammar_tip: 'If S 過去形, S would 動詞原形 は仮定法過去の基本形。現実に反する仮定や避けるべきシナリオを説明するときに使う。'
+      },
+      {
+        grammar: '関係代名詞 what（目的格）',
+        jp: 'うちが本当に売っているのは翻訳そのものじゃなくて、文化的な判断力と日本のIPホルダーとの直接の関係性なんですよ。',
+        hint: '関係代名詞 what を使って核心を明確に伝えましょう。',
+        context: 'ピッチや投資家説明で自社の価値を語っている場面',
+        model: "What we're really selling isn't translation — it's cultural judgment and direct relationships with Japanese IP holders.",
+        vocab: [
+          { term: "What we're really selling", desc: '関係代名詞 what を主語に使った強調構文。「私たちが本当に売っているもの」' },
+          { term: 'IP holders', desc: 'Intellectual Property holders。知的財産権保有者。コンテンツビジネスの必須業界用語。' }
+        ],
+        grammar_tip: 'What SV is ~ は「SVが〜するものは〜だ」という強調構文。プレゼンやピッチで「本当の価値は〜だ」と核心を明確に伝えるときに非常に効果的。'
+      },
+      {
+        grammar: '接続詞＋関係代名詞の複合',
+        jp: 'MantraやDEDENはうちが使えるツールで、MediBangやAGMが本当の競合なんですよ。この区別を正しく理解しておくことが、戦略の方向性をブラさないために重要なんですよね。',
+        hint: '対比構造と結論を一文にまとめましょう。',
+        context: 'チームへの戦略説明のまとめ場面',
+        model: "Mantra and DEDEN are tools we can use — MediBang and AGM are who we're actually competing against, and getting that distinction right is what keeps our strategy on track.",
+        vocab: [
+          { term: 'competing against', desc: '「〜と競合している」。compete with も使えるが against の方が対立感が明確。' },
+          { term: 'getting ~ right', desc: '「〜を正しく理解・把握する」という口語表現。' },
+          { term: 'keeps ~ on track', desc: '「〜を正しい軌道に保つ」。計画・戦略が方向性を外れないように、という意味。' }
+        ],
+        grammar_tip: 'A is ... — B is ... という対比構造を1文にまとめ、and で結論につなぐ複合文。チームへのブリーフィングで使える実践的パターン。'
+      }
+    ]
+  },
+  {
+    id: 'iyuno',
+    label: 'Iyuno（US）',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'Iyunoって、映画・テレビ・ストリーミング専門のローカライズ会社で、エンタメローカライズでは世界トップクラスと言われてるんですよ。',
+        hint: '会社の特徴と立ち位置をシンプルに伝えましょう。',
+        context: 'Iyunoを同僚に紹介している場面',
+        model: "Iyuno is the world's leading media and entertainment localization company, focusing exclusively on film, television, streaming, and gaming.",
+        vocab: [
+          { term: "the world's leading ~", desc: '「世界トップクラスの〜」。the best よりフォーマルでビジネス的。' },
+          { term: 'focusing exclusively on ~', desc: '「〜にのみ特化・専念している」。exclusively で他分野を一切やっていないことを強調。' }
+        ],
+        grammar_tip: 'focusing exclusively on ~ という現在分詞句を使って、専門性を同時に伝える文章パターン。'
+      },
+      {
+        grammar: '現在完了形',
+        jp: 'BTI StudiosやSDI Mediaの買収を重ねることで、エンタメローカライズの業界リーダーとしての地位を確立してきたんですよね。',
+        hint: '買収を通じた成長を現在完了で表現しましょう。',
+        context: 'Iyunoの成長戦略を説明している場面',
+        model: "They've built their position through strategic mergers, combining BTI Studios and SDI Media to become the undisputed category leader.",
+        vocab: [
+          { term: "They've built ~", desc: '現在完了で「積み上げてきた」という継続プロセスを表す。' },
+          { term: 'undisputed category leader', desc: '「文句なしのカテゴリーリーダー」。誰も異議を唱えられない地位を指す。' }
+        ],
+        grammar_tip: "have + 過去分詞 で成長のプロセスを表す。combining ~ という分詞構文で方法・手段を追加するのが自然。They've = They have の短縮形。"
+      },
+      {
+        grammar: '動名詞を主語に',
+        jp: 'エンタメ分野だけに特化することって、大きな強みになる一方で、クライアントが集中してしまうリスクにもなるんですよね。',
+        hint: '「〜すること」を動名詞で主語にして分析を伝えましょう。',
+        context: 'Iyunoの戦略リスクを分析している場面',
+        model: "Specializing in entertainment alone is both their greatest strength and their biggest risk — if streaming platforms consolidate, client concentration becomes a real problem.",
+        vocab: [
+          { term: 'Specializing in ~', desc: '「〜に特化すること」。動名詞が主語。Focusing on ~ も同様のパターン。' },
+          { term: 'client concentration', desc: '「クライアントの集中」。特定クライアントへの依存リスクを指すビジネス用語。' }
+        ],
+        grammar_tip: '動名詞（Ving）を主語にする構文。Specializing in ~ is ... で「〜に特化することは〜だ」という分析的な表現ができる。プレゼンや分析文書で使いやすいパターン。'
+      },
+      {
+        grammar: '関係代名詞 which（非制限用法）',
+        jp: 'IyunoってNetflixやDisney+と直接取引があって、それがエンタメ業界での圧倒的な信頼につながってるんですよね。',
+        hint: '前の節全体を which で受けて追加情報をつなげましょう。',
+        context: 'Iyunoのクライアント関係を説明している場面',
+        model: 'Iyuno works directly with clients like Netflix and Disney+, which gives them unmatched credibility in the entertainment industry.',
+        vocab: [
+          { term: 'works directly with ~', desc: '「〜と直接取引・協業している」。' },
+          { term: 'unmatched credibility', desc: '「他の追随を許さない信頼性」。unmatched は「比類なき」。' }
+        ],
+        grammar_tip: 'which gives them ~ は非制限用法の関係代名詞。前の節全体を受けて「それによって〜」という追加情報をつなぐ。プレゼンで自然な英語の流れを作るのに役立つ。'
+      },
+      {
+        grammar: '接続詞＋関係代名詞の複合',
+        jp: 'エンタメローカライズの巨人なんですけど、マンガや小説の出版ローカライズには手をつけていないので、うちみたいなIPスペシャリストにはまだ参入余地があるんですよね。',
+        hint: '競合の空白地帯を示す複合文でまとめましょう。',
+        context: '市場機会をピッチや投資家に説明している場面',
+        model: "They're the giant in entertainment localization, but they haven't moved into manga or fiction publishing — which is exactly the white space where a boutique IP specialist like us can build a strong position.",
+        vocab: [
+          { term: 'white space', desc: '「空白地帯・未開拓市場」。競合がいない市場機会を指すビジネス用語。' },
+          { term: 'boutique IP specialist', desc: '「小規模・専門特化したIPスペシャリスト」。Abracadabra のような会社を指す表現。' }
+        ],
+        grammar_tip: 'but と which を組み合わせ、否定で生まれた機会を非制限用法の関係代名詞でつなぐ複合構文。投資家やパートナーへのピッチで使える説得力のあるパターン。'
+      }
+    ]
+  },
+  {
+    id: 'welocalize',
+    label: 'Welocalize（US）',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'Welocalizeって、ニューヨークベースのAI活用型ローカライズ会社で、世界トップ10のソフトウェア・ハードウェア企業の8社を顧客に持ってるんですよ。',
+        hint: '会社の特徴と顧客規模をシンプルに伝えましょう。',
+        context: 'Welocalizeを同僚に紹介している場面',
+        model: "Welocalize is a New York-based, AI-driven localization company — 8 of the world's top 10 software and hardware companies are among their clients.",
+        vocab: [
+          { term: 'AI-driven', desc: '「AI活用型・AI主導の」。AIを中心に据えたビジネスモデルを表す形容詞。' },
+          { term: 'are among their clients', desc: '「〜のクライアントの中にいる」。顧客に含まれていることを表す口語表現。' }
+        ],
+        grammar_tip: '会社の特徴を一文で定義し、ダッシュ（—）で補足情報を加えるパターン。口語プレゼンで使いやすい構造。'
+      },
+      {
+        grammar: '現在完了形',
+        jp: '11社以上の買収を重ねてきて、独自のAIプラットフォームで差別化を図ってきた会社なんですよ。',
+        hint: '成長の歴史を現在完了で表現しましょう。',
+        context: 'Welocalizeの成長戦略を説明している場面',
+        model: "They've grown through more than 11 acquisitions and built a real edge through proprietary AI platforms like their OPAL system.",
+        vocab: [
+          { term: "They've grown through ~", desc: '「〜を通じて成長してきた」。成長の手段を表す現在完了。' },
+          { term: 'proprietary AI platforms', desc: '「独自のAIプラットフォーム」。proprietary は「自社開発の・独占的な」。' }
+        ],
+        grammar_tip: 'and で2つの現在完了をつなぐことで、複数の成長要因を一文で伝えられる。'
+      },
+      {
+        grammar: '対比接続詞 while',
+        jp: 'Welocalizeはテックや製造業には強いんですけど、エンタメや出版のローカライズに関してはまだ実績が薄いんですよね。',
+        hint: '強みのある分野と弱い分野を対比させましょう。',
+        context: 'Welocalizeの強みと弱みを分析している場面',
+        model: "While Welocalize has a strong foothold in tech and manufacturing, their entertainment and publishing credentials are still pretty thin.",
+        vocab: [
+          { term: 'has a strong foothold in ~', desc: '「〜に強い足がかりがある」。well-established in より口語的。' },
+          { term: 'credentials are thin', desc: '「実績・信頼性が薄い」。limited でも通じるが thin の方が口語的で率直な印象。' }
+        ],
+        grammar_tip: 'While A, B. の対比構文。強みと弱みを並べて分析するときに非常に使いやすい。'
+      },
+      {
+        grammar: '間接疑問文',
+        jp: 'Welocalizeがエンタメ・出版分野にどこまで本気で参入してくるか、注目しておく必要はありますよね。うちのテリトリーに来る可能性も否定できない。',
+        hint: '「どこまで〜するか注目する」という間接疑問文を使いましょう。',
+        context: '競合の将来動向を分析している場面',
+        model: "It's worth watching how seriously Welocalize moves into entertainment — we can't rule out that they'll eventually come into our territory.",
+        vocab: [
+          { term: "It's worth watching how ~", desc: '「〜がどう動くか注目する価値がある」。間接疑問文を使った分析的表現。' },
+          { term: "can't rule out that ~", desc: '「〜を否定できない・排除できない」。競合リスクを認識する際の表現。' }
+        ],
+        grammar_tip: 'watch how SV / see how SV という間接疑問文のパターン。「〜がどう動くか」という形で、競合動向を分析するときに使える自然な表現。'
+      },
+      {
+        grammar: '仮定法過去',
+        jp: 'もしWelocalizeがマンガ・出版ローカライズに本格参入してきたとしても、うちにはAnimateグループとのつながりとIPへの直接のアクセスがある。そこは簡単には真似できないですよね。',
+        hint: '「たとえ〜したとしても」という仮定法で自社の強みを示しましょう。',
+        context: '最悪のシナリオを想定しながら自社の優位性を説明している場面',
+        model: "Even if Welocalize moved into manga and publishing, we'd still have our Animate Group relationships and direct IP access — things they simply can't replicate.",
+        vocab: [
+          { term: 'Even if SV ~', desc: '「たとえ〜したとしても」。if より仮定の度合いが強く、それでも大丈夫という自信を示す。' },
+          { term: "things they simply can't replicate", desc: '「彼らが到底真似できないもの」。simply で「絶対に・到底」を強調。' }
+        ],
+        grammar_tip: 'Even if S 過去形, S would 〜 は仮定法過去のパターン。最悪のシナリオを想定しながらも自社の強みを示す「それでも大丈夫」という構文。ピッチで説得力が増す。'
+      }
+    ]
   }
 ];
 
