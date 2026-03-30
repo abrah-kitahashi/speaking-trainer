@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speaking Trainer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e0c;
+    --surface: #1a1915;
+    --surface2: #242320;
+    --accent: #e8c97a;
+    --accent2: #7ac4e8;
+    --text: #f0ede6;
+    --text-muted: #7a7870;
+    --border: #2e2c28;
+    --success: #7ae8b0;
+    --error: #e87a7a;
+    --warning: #e8a97a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.4; }
+  header { padding: 18px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+  .logo { font-family: 'DM Serif Display', serif; font-size: 19px; color: var(--accent); }
+  .logo span { color: var(--text-muted); font-style: italic; }
+  .badge { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px; }
+  main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 32px 18px; position: relative; z-index: 1; max-width: 780px; margin: 0 auto; width: 100%; }
+
+  /* ── Screens ── */
+  .screen { display: none; width: 100%; animation: fadeUp 0.4s ease; }
+  .screen.active { display: block; }
+
+  /* ── Start Screen ── */
+  .hero-title { font-family: 'DM Serif Display', serif; font-size: clamp(32px, 6vw, 54px); line-height: 1.1; margin-bottom: 12px; }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-sub { color: var(--text-muted); font-size: 15px; line-height: 1.7; max-width: 480px; margin: 0 auto 28px; }
+  .doc-preview { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; text-align: left; margin-bottom: 24px; }
+  .doc-preview-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  .doc-list { list-style: none; }
+  .doc-list li { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-muted); }
+  .doc-list li:last-child { border-bottom: none; }
+  .doc-list li::before { content: '📄'; }
+  .doc-list strong { color: var(--text); font-weight: 500; }
+
+  .start-actions { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .btn-main { background: var(--accent); color: #0f0e0c; border: none; padding: 13px 36px; border-radius: 8px; font-size: 15px; font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; }
+  .btn-main:hover { background: #f0d68a; transform: translateY(-1px); }
+  .btn-outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 11px 26px; border-radius: 8px; font-size: 14px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; }
+  .btn-outline:hover { background: rgba(232,201,122,0.08); }
+  .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); padding: 10px 20px; border-radius: 8px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; }
+  .btn-ghost:hover { border-color: var(--text-muted); color: var(--text); }
+  .start-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  /* ── Stats pill on start screen ── */
+  .stats-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 20px; margin-bottom: 20px; display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+  .stat-item { text-align: center; }
+  .stat-num { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--accent); }
+  .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+
+  /* ── Training Screen ── */
+  .progress-bar-wrap { width: 100%; margin-bottom: 24px; }
+  .progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+  .progress-track { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; transition: width 0.5s ease; }
+  .step-chips { display: flex; gap: 7px; margin-bottom: 22px; flex-wrap: wrap; }
+  .chip { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); color: var(--text-muted); }
+  .chip.active { background: var(--accent); color: #0f0e0c; border-color: var(--accent); }
+  .chip.done { background: var(--surface2); color: var(--success); border-color: var(--success); }
+
+  .q-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 26px; margin-bottom: 18px; position: relative; overflow: hidden; }
+  .q-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .q-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .grammar-tag { background: rgba(232,201,122,0.12); border: 1px solid rgba(232,201,122,0.3); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-size: 10px; }
+  .q-jp { font-size: 18px; line-height: 1.5; margin-bottom: 10px; }
+  .q-hint { font-size: 13px; color: var(--text-muted); font-style: italic; line-height: 1.6; }
+  .context-note { background: var(--surface2); border-left: 3px solid var(--accent2); padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6; }
+  .context-note strong { color: var(--accent2); }
+
+  .answer-wrap { margin-bottom: 14px; }
+  .answer-label { font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 7px; }
+  textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 13px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.6; min-height: 84px; transition: border-color 0.2s; outline: none; resize: none; }
+  textarea:focus { border-color: var(--accent); }
+  textarea::placeholder { color: var(--text-muted); }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-primary { background: var(--accent); color: #0f0e0c; border: none; padding: 11px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; }
+  .btn-primary:hover:not(:disabled) { background: #f0d68a; transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-secondary { background: transparent; color: var(--text-muted); border: 1px solid var(--border); padding: 11px 16px; border-radius: 8px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; }
+  .btn-secondary:hover { border-color: var(--text-muted); color: var(--text); }
+  .error-msg { color: var(--error); font-size: 13px; margin-top: 6px; display: none; }
+
+  /* ── Feedback Card ── */
+  .feedback-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px 26px; margin-top: 16px; display: none; animation: fadeUp 0.3s ease; }
+  .feedback-card.show { display: block; }
+
+  .fb-section { margin-bottom: 18px; }
+  .fb-section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .fb-section-title.model { color: var(--accent2); }
+  .fb-section-title.vocab { color: var(--accent); }
+  .fb-section-title.grammar { color: var(--success); }
+  .fb-section-title.next { color: var(--text-muted); }
+  .model-answer { background: var(--surface2); border-radius: 8px; padding: 12px 14px; font-size: 15px; color: var(--text); line-height: 1.6; border-left: 3px solid var(--accent2); }
+  .vocab-list { display: flex; flex-direction: column; gap: 7px; }
+  .vocab-item { background: var(--surface2); border-radius: 8px; padding: 10px 13px; border-left: 3px solid var(--accent); }
+  .vocab-term { font-size: 14px; color: var(--accent); font-weight: 600; margin-bottom: 2px; }
+  .vocab-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .grammar-box { background: var(--surface2); border-radius: 8px; padding: 12px 14px; font-size: 13px; color: var(--text-muted); line-height: 1.7; border-left: 3px solid var(--success); }
+  .next-preview { background: var(--surface2); border-radius: 8px; padding: 12px 14px; font-size: 14px; color: var(--text-muted); border-left: 3px solid var(--border); font-style: italic; }
+
+  /* ── Self Scoring ── */
+  .scoring-section { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 4px; }
+  .scoring-title { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+  .score-display { text-align: center; margin-bottom: 12px; }
+  .score-number { font-family: 'DM Serif Display', serif; font-size: 48px; color: var(--accent); line-height: 1; }
+  .score-pct { font-size: 18px; color: var(--text-muted); }
+  .score-history-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; font-size: 13px; color: var(--text-muted); min-height: 22px; }
+  .trend-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .trend-up { background: rgba(122,232,176,0.15); color: var(--success); border: 1px solid rgba(122,232,176,0.3); }
+  .trend-down { background: rgba(232,122,122,0.15); color: var(--error); border: 1px solid rgba(232,122,122,0.3); }
+  .trend-stable { background: rgba(232,201,122,0.1); color: var(--accent); border: 1px solid rgba(232,201,122,0.2); }
+  .trend-new { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
+
+  input[type=range] { -webkit-appearance: none; width: 100%; height: 6px; background: var(--border); border-radius: 3px; outline: none; margin-bottom: 8px; cursor: pointer; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: var(--accent); border-radius: 50%; cursor: pointer; box-shadow: 0 2px 8px rgba(232,201,122,0.4); }
+  .slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 14px; }
+  .btn-record { background: var(--accent); color: #0f0e0c; border: none; padding: 11px 28px; border-radius: 8px; font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; width: 100%; }
+  .btn-record:hover { background: #f0d68a; }
+  .btn-record:disabled { opacity: 0.4; cursor: not-allowed; }
+  .score-saved-msg { text-align: center; font-size: 13px; color: var(--success); margin-top: 8px; display: none; }
+
+  /* ── Q&A Box ── */
+  .qa-box { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px; }
+  .qa-title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+  .qa-history { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; max-height: 280px; overflow-y: auto; }
+  .qa-bubble { padding: 9px 13px; border-radius: 10px; font-size: 14px; line-height: 1.6; }
+  .qa-bubble.user { background: rgba(232,201,122,0.1); border: 1px solid rgba(232,201,122,0.2); color: var(--text); align-self: flex-end; max-width: 90%; }
+  .qa-bubble.ai { background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); max-width: 95%; }
+  .qa-input-row { display: flex; gap: 8px; }
+  .qa-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 9px 13px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; resize: none; min-height: 40px; }
+  .qa-input:focus { border-color: var(--accent); }
+  .qa-input::placeholder { color: var(--text-muted); }
+  .qa-send { background: var(--surface2); border: 1px solid var(--border); color: var(--accent); padding: 9px 14px; border-radius: 8px; font-size: 14px; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
+  .qa-send:hover:not(:disabled) { border-color: var(--accent); }
+  .qa-send:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ── Stats Screen ── */
+  .stats-header { margin-bottom: 28px; }
+  .stats-header h2 { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--accent); margin-bottom: 6px; }
+  .stats-header p { color: var(--text-muted); font-size: 14px; }
+
+  .overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .overview-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
+  .overview-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--accent); margin-bottom: 4px; }
+  .overview-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; line-height: 1.4; }
+
+  .section-title { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; margin-top: 24px; }
+
+  .grammar-table { width: 100%; border-collapse: collapse; }
+  .grammar-table th { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--border); }
+  .grammar-table td { padding: 10px 10px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .grammar-table tr:last-child td { border-bottom: none; }
+  .score-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .score-bar-track { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+  .score-bar-fill.high { background: var(--success); }
+  .score-bar-fill.mid { background: var(--accent); }
+  .score-bar-fill.low { background: var(--error); }
+  .score-val { font-size: 13px; font-weight: 600; min-width: 38px; text-align: right; }
+
+  .question-row { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; }
+  .question-row-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .question-row-grammar { font-size: 11px; color: var(--accent); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .question-row-score { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--accent); }
+  .question-row-text { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 6px; }
+  .question-row-meta { display: flex; align-items: center; gap: 8px; }
+  .attempts-label { font-size: 11px; color: var(--text-muted); }
+  .review-flag { font-size: 11px; background: rgba(232,122,122,0.15); color: var(--error); border: 1px solid rgba(232,122,122,0.3); padding: 2px 8px; border-radius: 10px; }
+  .no-data-msg { text-align: center; color: var(--text-muted); font-size: 14px; padding: 32px 0; }
+
+  /* ── Complete Screen ── */
+  .complete-icon { font-size: 50px; margin-bottom: 16px; text-align: center; }
+  .complete-title { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--accent); margin-bottom: 10px; text-align: center; }
+  .complete-sub { color: var(--text-muted); font-size: 14px; line-height: 1.7; margin-bottom: 24px; text-align: center; }
+  .summary-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
+  .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
+  .summary-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--accent); margin-bottom: 4px; }
+  .summary-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; }
+
+  /* ── Loading dots ── */
+  .loading-dots { display: inline-flex; gap: 4px; align-items: center; }
+  .loading-dots span { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; animation: bounce 1.2s infinite; }
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-6px); opacity: 1; } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Settings Modal */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:100; align-items:center; justify-content:center; }
+  .modal-overlay.show { display:flex; }
+  .modal { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:28px; width:90%; max-width:440px; }
+  .modal h3 { font-family:'DM Serif Display',serif; font-size:18px; color:var(--accent); margin-bottom:6px; }
+  .modal p { font-size:13px; color:var(--text-muted); margin-bottom:20px; line-height:1.6; }
+  .modal label { display:block; font-size:12px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; }
+  .modal input { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:10px 14px; color:var(--text); font-size:14px; font-family:'DM Sans',sans-serif; margin-bottom:16px; }
+  .modal input:focus { outline:none; border-color:var(--accent); }
+  .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:4px; }
+  .btn-settings { background:none; border:none; cursor:pointer; color:var(--text-muted); font-size:18px; padding:4px 8px; border-radius:8px; transition:color 0.2s; }
+  .btn-settings:hover { color:var(--accent); }
+  .api-key-status { font-size:11px; margin-top:2px; }
+  .api-key-status.set { color:var(--success); }
+  .api-key-status.unset { color:var(--warning); }
+
+  /* AI Scoring */
+  .scoring-title { font-size:13px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px; }
+  .ai-score-loading { text-align:center; color:var(--text-muted); font-size:13px; padding:8px 0; }
+  .ai-score-label { font-size:11px; color:var(--accent2); text-transform:uppercase; letter-spacing:0.1em; margin-top:4px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Speaking<span>Trainer</span></div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span class="api-key-status" id="api-key-status"></span>
+    <button class="btn-settings" onclick="showSettings()" title="設定">⚙</button>
+  </div>
+</header>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal">
+    <h3>設定</h3>
+    <p>Anthropic APIキーを設定するとAI採点と質問応答機能が使えます。<br>キーはブラウザのlocalStorageにのみ保存されます。</p>
+    <label>Anthropic API Key</label>
+    <input type="password" id="api-key-input" placeholder="sk-ant-..." />
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeSettings()">キャンセル</button>
+      <button class="btn-primary" onclick="saveApiKeySetting()">保存</button>
+    </div>
+  </div>
+</div>
+<main>
+
+  <!-- ══ Start Screen ══ -->
+  <div id="start-screen" class="screen active" style="text-align:center">
+    <h1 class="hero-title">口語英語を<br><em>鍛える</em></h1>
+    <p class="hero-sub">ビジネスドキュメントを素材に、<br>ネイティブが使う口語表現を段階的にトレーニング。</p>
+
+    <div class="stats-pill" id="start-stats-pill" style="display:none">
+      <div class="stat-item"><div class="stat-num" id="ss-avg">―</div><div class="stat-label">個人平均</div></div>
+      <div class="stat-item"><div class="stat-num" id="ss-attempts">―</div><div class="stat-label">総回答数</div></div>
+      <div class="stat-item"><div class="stat-num" id="ss-review">―</div><div class="stat-label">復習対象</div></div>
+    </div>
+
+    <div class="doc-preview">
+      <div class="doc-preview-label">📂 読み込み済みドキュメント</div>
+      <ul class="doc-list">
+        <li><strong>Competitive Analysis: US Localization Services</strong> — Lionbridge, Iyuno, Welocalize 他</li>
+        <li><strong>Competitive Analysis: Japan Companies</strong> — MediBang TraDe, Active Gaming Media 他</li>
+      </ul>
+    </div>
+
+    <div class="start-actions">
+      <button class="btn-main" onclick="startTraining(false)">トレーニング開始 →</button>
+      <button class="btn-outline" id="resume-btn" onclick="startTraining(true)" style="display:none">↩ 続きから再開</button>
+      <button class="btn-outline" id="review-btn" onclick="startReview()" style="display:none">🔁 復習モード</button>
+      <button class="btn-ghost" onclick="showStats()">📊 統計を見る</button>
+      <div class="start-meta" id="resume-info"></div>
+    </div>
+  </div>
+
+  <!-- ══ Training Screen ══ -->
+  <div id="training-screen" class="screen">
+    <div class="progress-bar-wrap">
+      <div class="progress-meta">
+        <span id="step-label">Step 1 / 5</span>
+        <span id="topic-label">―</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:20%"></div></div>
+    </div>
+    <div class="step-chips" id="step-chips"></div>
+
+    <div class="q-card">
+      <div class="q-label"><span>今回の問題</span><span class="grammar-tag" id="grammar-tag">―</span></div>
+      <div class="q-jp" id="q-jp">読み込み中...</div>
+      <div class="q-hint" id="q-hint"></div>
+    </div>
+
+    <div class="context-note" id="context-note" style="display:none">
+      <strong>💡 コンテクスト：</strong><span id="context-text"></span>
+    </div>
+
+    <div class="answer-wrap">
+      <div class="answer-label">あなたの英語回答</div>
+      <textarea id="user-answer" placeholder="英語で書いてみてください...（Enter で確認 / Shift+Enter で改行）"></textarea>
+      <div class="error-msg" id="error-msg">回答を入力してから送信してください。</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" id="submit-btn" onclick="submitAnswer()">確認する</button>
+      <button class="btn-secondary" onclick="skipQuestion()">スキップ</button>
+    </div>
+
+    <!-- Feedback Card -->
+    <div class="feedback-card" id="feedback-card">
+      <div class="fb-section">
+        <div class="fb-section-title model">💬 ネイティブ的な言い方</div>
+        <div class="model-answer" id="fb-model"></div>
+      </div>
+      <div class="fb-section" id="vocab-section">
+        <div class="fb-section-title vocab">📌 表現・単語の解説</div>
+        <div class="vocab-list" id="vocab-list"></div>
+      </div>
+      <div class="fb-section">
+        <div class="fb-section-title grammar">📖 文法ポイント</div>
+        <div class="grammar-box" id="fb-grammar"></div>
+      </div>
+      <div class="fb-section" id="next-preview-section" style="display:none">
+        <div class="fb-section-title next">→ 次のステップ（プレビュー）</div>
+        <div class="next-preview" id="fb-next"></div>
+      </div>
+
+      <!-- AI Scoring -->
+      <div class="scoring-section">
+        <div class="scoring-title">📊 採点</div>
+        <div id="ai-score-loading" class="ai-score-loading" style="display:none">🤖 AI採点中...</div>
+        <div id="score-main" style="">
+          <div class="score-display">
+            <span class="score-number" id="score-display-num">70</span><span class="score-pct">%</span>
+          </div>
+          <div class="ai-score-label" id="ai-score-label" style="display:none">AI採点（調整可）</div>
+          <div class="score-history-row" id="score-history-row"></div>
+          <input type="range" id="score-slider" min="0" max="100" value="70" oninput="updateScoreDisplay(this.value)">
+          <div class="slider-labels"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+          <button class="btn-record" id="record-btn" onclick="recordScore()">このスコアで記録する</button>
+          <div class="score-saved-msg" id="score-saved-msg">✅ 記録しました！</div>
+        </div>
+      </div>
+
+      <!-- Q&A -->
+      <div class="qa-box">
+        <div class="qa-title">💬 この問題について質問する</div>
+        <div class="qa-history" id="qa-history"></div>
+        <div class="qa-input-row">
+          <textarea class="qa-input" id="qa-input" placeholder="わからないことを質問してみましょう..." rows="1"></textarea>
+          <button class="qa-send" id="qa-send" onclick="sendQuestion()">送信</button>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:20px">
+        <button class="btn-primary" id="next-btn" onclick="nextStep()">次へ進む →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Stats Screen ══ -->
+  <div id="stats-screen" class="screen">
+    <div class="stats-header">
+      <h2>📊 あなたの統計</h2>
+      <p id="stats-subtitle">これまでのトレーニング結果を分析しています</p>
+    </div>
+    <div id="stats-content"></div>
+    <div style="margin-top:24px;text-align:center">
+      <button class="btn-ghost" onclick="showScreen('start-screen')">← スタートに戻る</button>
+    </div>
+  </div>
+
+  <!-- ══ Complete Screen ══ -->
+  <div id="complete-screen" class="screen" style="text-align:center">
+    <div class="complete-icon">🎉</div>
+    <div class="complete-title">1セット完了！</div>
+    <p class="complete-sub">今日のトレーニングお疲れ様でした。<br>採点を記録して弱点を把握しましょう。</p>
+    <div class="summary-grid">
+      <div class="summary-card"><div class="summary-num" id="sum-steps">5</div><div class="summary-label">ステップ数</div></div>
+      <div class="summary-card"><div class="summary-num" id="sum-grammar">3</div><div class="summary-label">文法パターン</div></div>
+      <div class="summary-card"><div class="summary-num" id="sum-topic">―</div><div class="summary-label">今日のトピック</div></div>
+    </div>
+    <div class="start-actions">
+      <button class="btn-main" onclick="showStats()">📊 統計を見る</button>
+      <button class="btn-outline" onclick="restartTraining()">もう1セット →</button>
+    </div>
+  </div>
+
+</main>
+<script>
+// ══════════════════════════════════════════
+// TOPIC DATA
+// ══════════════════════════════════════════
+const TOPICS = [
+  {
+    id: 'lionbridge',
+    label: 'Lionbridge (US)',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'ライオンブリッジって、ウォルサムっていうマサチューセッツの会社なんですよ。',
+        hint: 'まず基本情報をシンプルに伝える練習です。',
+        context: 'Lionbridgeを同僚に紹介している場面',
+        model: 'Lionbridge is based in Waltham, Massachusetts.',
+        vocab: [{ term: 'based in ~', desc: '「〜に拠点を置く」。located in でも通じるが based in の方がビジネス口語でより自然。' }],
+        grammar_tip: '現在形で会社の基本情報を伝える最もシンプルなパターン。主語＋is＋場所の形を覚えておこう。'
+      },
+      {
+        grammar: '関係代名詞 that',
+        jp: 'ライオンブリッジって、AIのデータサービスとかもやってる翻訳会社なんですよね。',
+        hint: '「翻訳＋α」を関係代名詞でつなげてみましょう。',
+        context: 'どんな会社か説明している場面',
+        model: 'Lionbridge is a translation company that also does AI data services.',
+        vocab: [{ term: 'that also does ~', desc: '「〜もやっている」という追加情報を関係代名詞でつなぐ口語パターン。which より that の方が話し言葉で自然。' }],
+        grammar_tip: '関係代名詞 that で名詞に説明を追加する基本形。会話では which より that が圧倒的によく使われる。'
+      },
+      {
+        grammar: '現在完了形',
+        jp: '30年近くビジネスやってて、政府機関とかの大きなクライアントもいるんですよ。',
+        hint: '長年の実績を現在完了でさらりと言ってみましょう。',
+        context: '会社の実績を説明している場面',
+        model: "They've been around for almost 30 years and work with major clients like government agencies.",
+        vocab: [
+          { term: 'been around', desc: '「（会社・人が）ずっと存在している」という口語表現。' },
+          { term: 'major clients', desc: '「主要クライアント」。big clients でも通じるが major の方がビジネス的。' }
+        ],
+        grammar_tip: "現在完了 have been ~ で「ずっと〜している」という継続を表す。They've = They have の短縮形。"
+      },
+      {
+        grammar: '分詞構文',
+        jp: 'AIプラットフォームも作っていて、マーケットのトップ5に入ってるんですよね。',
+        hint: '2つの情報を分詞でつなげてみましょう。',
+        context: '競合分析を共有している場面',
+        model: "Building their own AI platform, they've secured a spot in the top 5 globally.",
+        vocab: [
+          { term: 'secured a spot', desc: '「ポジションを確保した」。got into でも通じるが secured はより洗練された表現。' },
+          { term: 'globally', desc: '「グローバルに」。in the world より簡潔でビジネス口語でよく使われる。' }
+        ],
+        grammar_tip: '分詞構文（Ving, 主語+動詞）は「〜しながら」「〜することで」を表す。プレゼン場面で使える。'
+      },
+      {
+        grammar: '接続詞＋関係代名詞の複合',
+        jp: '強みはたくさんあるんだけど、大きい組織ゆえに動きが遅いのが弱点ですね。うちみたいなブティック系には逆にチャンスかなと。',
+        hint: '長所・短所・自社への示唆を1〜2文でまとめましょう。',
+        context: '競合分析の結論を口頭で共有している場面',
+        model: "They have a lot going for them, but the size that makes them powerful also slows them down — which is actually an opportunity for boutique players like us.",
+        vocab: [
+          { term: 'have a lot going for them', desc: '「強みがたくさんある」という慣用句。' },
+          { term: 'boutique players', desc: '「小規模・専門特化型の会社」を指すビジネス定番表現。' },
+          { term: 'which is actually ~', desc: '前の節全体を受ける関係代名詞。「それがまさに〜」と話をつなぐ高度なパターン。' }
+        ],
+        grammar_tip: 'but と which を組み合わせて対比と追加情報を同時に伝える複合文。ピッチや分析の締めで使える。'
+      }
+    ]
+  },
+  {
+    id: 'abracadabra',
+    label: 'Abracadabra の強み',
+    steps: [
+      {
+        grammar: 'シンプル現在形',
+        jp: 'うちって、マンガとか小説の翻訳が専門なんですよ。',
+        hint: '自社紹介をシンプルに。',
+        context: '初対面の相手に自社を紹介している場面',
+        model: 'We specialize in manga and fiction localization.',
+        vocab: [
+          { term: 'specialize in ~', desc: '「〜を専門にしている」。We focus on ~ でも通じるが specialize in の方が専門性を強調できる。' },
+          { term: 'localization', desc: '単なる翻訳ではなく、文化・市場に合わせた現地化を指す業界標準用語。' }
+        ],
+        grammar_tip: 'specialize in + 名詞 は自社の専門分野を簡潔に伝える必須ビジネス表現。'
+      },
+      {
+        grammar: '関係代名詞 which（非制限用法）',
+        jp: 'アニメイトグループに関係してる会社なので、日本のIPホルダーとの関係がものすごく強いんですよね。',
+        hint: 'アニメイトとの関係を関係代名詞で説明しましょう。',
+        context: '強みを説明している場面',
+        model: "We're affiliated with the Animate Group, which gives us incredibly strong ties to Japanese IP holders.",
+        vocab: [
+          { term: 'affiliated with ~', desc: '「〜と提携・関係している」。related to より正式でビジネス的な表現。' },
+          { term: 'ties to ~', desc: '「〜とのつながり」。connections より口語的でよく使われる。' },
+          { term: 'IP holders', desc: '知的財産権保有者。コンテンツビジネスの必須業界用語。' }
+        ],
+        grammar_tip: 'which gives us ~ は関係代名詞の非制限用法。前の節全体を受けて「それによって〜」という追加情報を自然につなげる。'
+      },
+      {
+        grammar: '対比接続詞 while',
+        jp: '大手LSPさんは量を大事にしてるけど、うちは文化的な深みと編集品質にフォーカスしてますね。',
+        hint: '競合との差別化を対比で表現しましょう。',
+        context: '競合との違いを説明している場面',
+        model: "While the big LSPs focus on volume, we're really focused on cultural depth and editorial quality.",
+        vocab: [
+          { term: 'LSP', desc: 'Language Service Provider の略。翻訳・言語サービス会社を指す業界用語。' },
+          { term: 'volume', desc: 'ここでは「量・処理量」の意味。ビジネスで quantity の代わりによく使われる。' },
+          { term: 'editorial quality', desc: '「編集品質」。accuracy だけでなく、読みやすさや表現の洗練度まで含む概念。' }
+        ],
+        grammar_tip: 'While A, B. は「Aの一方でBは〜」という対比の定番構文。競合との差別化を語るときに非常に使いやすい。'
+      },
+      {
+        grammar: '分詞＋接続詞',
+        jp: 'MantraEngineというAIツールも使いながら、AIではできない文化的な判断は人間がやっています。そのハイブリッドモデルがうちの強みですね。',
+        hint: 'AIと人間の役割分担を分詞でまとめましょう。',
+        context: '自社の差別化を説明している場面',
+        model: "Using tools like Mantra Engine for efficiency, we still rely on human judgment for the cultural nuances that AI just can't handle — that hybrid approach is really our edge.",
+        vocab: [
+          { term: 'rely on ~', desc: '「〜に頼る」。depend on と同義だが rely on の方がビジネス口語でよく使われる。' },
+          { term: 'nuances', desc: '「ニュアンス・微妙な差異」。文化的な細かさを表すときの定番単語。' },
+          { term: 'our edge', desc: '「うちの強み・優位性」。our advantage より簡潔でネイティブっぽい表現。' }
+        ],
+        grammar_tip: 'Using ~ で始まる分詞構文は「〜を使いながら」という同時進行を表す。still（それでも）と組み合わせて対比を強調できる。'
+      },
+      {
+        grammar: '複合文（まとめ・ピッチ）',
+        jp: '正直、大手さんが量で攻めてくる中で、うちが勝てるのは文化的な信頼性と日本のIPホルダーとの直接の関係性で、それはどんな大手でも短期間では真似できないですよね。',
+        hint: 'ピッチの締めくくりとして、説得力ある1〜2文にまとめましょう。',
+        context: '投資家やパートナーへのピッチの締めくくり',
+        model: "Honestly, while the big players are winning on scale, where we really win is cultural credibility and direct relationships with Japanese IP holders — and that's something no large player can replicate quickly.",
+        vocab: [
+          { term: 'winning on scale', desc: '「規模で勝っている」。スタートアップ・ビジネス文脈でよく使われる。' },
+          { term: 'cultural credibility', desc: '「文化的信頼性」。文化への深い理解から来る信頼感を指す。' },
+          { term: 'replicate', desc: '「複製する・真似する」。copy より洗練されたビジネス表現。' }
+        ],
+        grammar_tip: '"where we really win is ~" は強調構文の口語バージョン。Honestly を文頭に置くと話し言葉のリアリティが増す。'
+      }
+    ]
+  }
+];
+
+// ══════════════════════════════════════════
+// API KEY MANAGEMENT
+// ══════════════════════════════════════════
+function getApiKey() {
+  return localStorage.getItem('st_api_key') || '';
+}
+function showSettings() {
+  document.getElementById('api-key-input').value = getApiKey();
+  document.getElementById('settings-modal').classList.add('show');
+}
+function closeSettings() {
+  document.getElementById('settings-modal').classList.remove('show');
+}
+function saveApiKeySetting() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (key) localStorage.setItem('st_api_key', key);
+  else localStorage.removeItem('st_api_key');
+  closeSettings();
+  updateApiKeyStatus();
+}
+function updateApiKeyStatus() {
+  const el = document.getElementById('api-key-status');
+  if (getApiKey()) {
+    el.textContent = '🔑 AI有効';
+    el.className = 'api-key-status set';
+  } else {
+    el.textContent = 'APIキー未設定';
+    el.className = 'api-key-status unset';
+  }
+}
+
+// ══════════════════════════════════════════
+// AI SCORING
+// ══════════════════════════════════════════
+async function aiScore(userAnswer, step) {
+  const apiKey = getApiKey();
+  if (!apiKey) return null;
+
+  const prompt = `英語口語トレーニングの採点をしてください。
+
+問題（日本語）: ${step.jp}
+模範解答: ${step.model}
+学習者の回答: ${userAnswer}
+文法フォーカス: ${step.grammar}
+
+採点基準（0〜100点）:
+- 意味・内容の正確さ（40点）
+- 文法の正確さ（30点）
+- 自然さ・流暢さ（30点）
+
+数字のみを回答してください（例: 75）`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 10,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text?.trim() || '';
+    const score = parseInt(text.match(/\d+/)?.[0] || '');
+    return isNaN(score) ? null : Math.min(100, Math.max(0, score));
+  } catch(e) {
+    return null;
+  }
+}
+
+// ══════════════════════════════════════════
+// STORAGE
+// ══════════════════════════════════════════
+function getScores() {
+  try { const s = localStorage.getItem('st_scores'); return s ? JSON.parse(s) : {}; } catch(e) { return {}; }
+}
+function saveScoreEntry(questionId, score) {
+  const scores = getScores();
+  if (!scores[questionId]) scores[questionId] = [];
+  scores[questionId].push({ date: Date.now(), score });
+  try { localStorage.setItem('st_scores', JSON.stringify(scores)); } catch(e) {}
+}
+function getProgress() {
+  try { const s = localStorage.getItem('st_progress'); return s ? JSON.parse(s) : null; } catch(e) { return null; }
+}
+function saveProgress() {
+  try { localStorage.setItem('st_progress', JSON.stringify({ topicId: currentTopic.id, step: currentStep })); } catch(e) {}
+}
+function clearProgress() {
+  try { localStorage.removeItem('st_progress'); } catch(e) {}
+}
+
+// ══════════════════════════════════════════
+// ANALYTICS
+// ══════════════════════════════════════════
+function getQuestionById(questionId) {
+  const parts = questionId.split('_');
+  const stepIndex = parseInt(parts[parts.length - 1]);
+  const topicId = parts.slice(0, -1).join('_');
+  const topic = TOPICS.find(t => t.id === topicId);
+  if (!topic || isNaN(stepIndex) || stepIndex >= topic.steps.length) return null;
+  return { topic, step: topic.steps[stepIndex], stepIndex };
+}
+
+function getAllAttempts(scores) {
+  return Object.values(scores).flat().map(s => s.score);
+}
+
+function getPersonalAverage(scores) {
+  const all = getAllAttempts(scores);
+  if (!all.length) return null;
+  return Math.round(all.reduce((a, b) => a + b, 0) / all.length);
+}
+
+function getRolling3Avg(attempts) {
+  if (!attempts.length) return null;
+  const last3 = attempts.slice(-3);
+  return Math.round(last3.reduce((a, b) => a + b.score, 0) / last3.length);
+}
+
+function getTrend(attempts) {
+  if (attempts.length < 2) return 'new';
+  const last = attempts[attempts.length - 1].score;
+  const prevAvg = attempts.slice(0, -1).reduce((a, b) => a + b.score, 0) / (attempts.length - 1);
+  if (last >= prevAvg + 6) return 'up';
+  if (last <= prevAvg - 6) return 'down';
+  return 'stable';
+}
+
+function getReviewQueue(scores) {
+  const personalAvg = getPersonalAverage(scores);
+  if (personalAvg === null) return [];
+  const queue = [];
+  for (const [qId, attempts] of Object.entries(scores)) {
+    if (!attempts.length) continue;
+    const rolling = getRolling3Avg(attempts);
+    if (rolling < personalAvg) queue.push({ qId, rolling, diff: personalAvg - rolling });
+  }
+  queue.sort((a, b) => b.diff - a.diff);
+  return queue.map(q => q.qId);
+}
+
+function getGrammarAverages(scores) {
+  const grammarMap = {};
+  for (const [qId, attempts] of Object.entries(scores)) {
+    if (!attempts.length) continue;
+    const q = getQuestionById(qId);
+    if (!q) continue;
+    const grammar = q.step.grammar;
+    if (!grammarMap[grammar]) grammarMap[grammar] = [];
+    attempts.forEach(a => grammarMap[grammar].push(a.score));
+  }
+  return Object.entries(grammarMap).map(([grammar, scores]) => ({
+    grammar,
+    avg: Math.round(scores.reduce((a, b) => a + b, 0) / scores.length),
+    count: scores.length
+  })).sort((a, b) => a.avg - b.avg);
+}
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let currentTopic = null;
+let currentStep = 0;
+let currentQuestionId = null;
+let isReviewMode = false;
+let reviewQueue = [];
+let reviewIndex = 0;
+let sessionData = { topic: '', stepsCompleted: 0, grammarPatterns: new Set() };
+let qaContext = [];
+let scoreRecorded = false;
+
+// ══════════════════════════════════════════
+// SCREEN MANAGEMENT
+// ══════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ══════════════════════════════════════════
+// START SCREEN INIT
+// ══════════════════════════════════════════
+function initStartScreen() {
+  const scores = getScores();
+  const personalAvg = getPersonalAverage(scores);
+  const allAttempts = getAllAttempts(scores);
+  const reviewQueue = getReviewQueue(scores);
+
+  if (allAttempts.length > 0) {
+    document.getElementById('start-stats-pill').style.display = 'flex';
+    document.getElementById('ss-avg').textContent = personalAvg + '%';
+    document.getElementById('ss-attempts').textContent = allAttempts.length;
+    document.getElementById('ss-review').textContent = reviewQueue.length;
+  }
+
+  const saved = getProgress();
+  if (saved) {
+    const topic = TOPICS.find(t => t.id === saved.topicId);
+    if (topic && saved.step < topic.steps.length) {
+      document.getElementById('resume-btn').style.display = 'inline-block';
+      document.getElementById('resume-info').textContent = `${topic.label} — Step ${saved.step + 1} から再開`;
+    }
+  }
+
+  if (reviewQueue.length > 0) {
+    const rb = document.getElementById('review-btn');
+    rb.style.display = 'inline-block';
+    rb.textContent = `🔁 復習モード（${reviewQueue.length}問）`;
+  }
+}
+
+// ══════════════════════════════════════════
+// TRAINING FLOW
+// ══════════════════════════════════════════
+function startTraining(resume) {
+  isReviewMode = false;
+  if (resume) {
+    const saved = getProgress();
+    if (saved) {
+      currentTopic = TOPICS.find(t => t.id === saved.topicId) || TOPICS[0];
+      currentStep = saved.step;
+    } else {
+      currentTopic = TOPICS[Math.floor(Math.random() * TOPICS.length)];
+      currentStep = 0;
+    }
+  } else {
+    clearProgress();
+    currentTopic = TOPICS[Math.floor(Math.random() * TOPICS.length)];
+    currentStep = 0;
+  }
+  sessionData = { topic: currentTopic.label, stepsCompleted: 0, grammarPatterns: new Set() };
+  showScreen('training-screen');
+  renderStep();
+}
+
+function startReview() {
+  const scores = getScores();
+  reviewQueue = getReviewQueue(scores);
+  if (!reviewQueue.length) return;
+  isReviewMode = true;
+  reviewIndex = 0;
+  sessionData = { topic: '復習モード', stepsCompleted: 0, grammarPatterns: new Set() };
+  showScreen('training-screen');
+  renderReviewStep();
+}
+
+function renderReviewStep() {
+  const qId = reviewQueue[reviewIndex];
+  const q = getQuestionById(qId);
+  if (!q) { nextStep(); return; }
+  currentTopic = q.topic;
+  currentStep = q.stepIndex;
+  currentQuestionId = qId;
+  renderStepContent();
+  document.getElementById('step-label').textContent = `復習 ${reviewIndex + 1} / ${reviewQueue.length}`;
+  document.getElementById('topic-label').textContent = '復習モード';
+  document.getElementById('progress-fill').style.width = `${((reviewIndex + 1) / reviewQueue.length) * 100}%`;
+}
+
+function renderStep() {
+  currentQuestionId = `${currentTopic.id}_${currentStep}`;
+  renderStepContent();
+  document.getElementById('step-label').textContent = `Step ${currentStep + 1} / ${currentTopic.steps.length}`;
+  document.getElementById('topic-label').textContent = currentTopic.label;
+  document.getElementById('progress-fill').style.width = `${((currentStep + 1) / currentTopic.steps.length) * 100}%`;
+
+  const chipsEl = document.getElementById('step-chips');
+  chipsEl.innerHTML = '';
+  currentTopic.steps.forEach((s, i) => {
+    const chip = document.createElement('div');
+    chip.className = `chip ${i < currentStep ? 'done' : i === currentStep ? 'active' : ''}`;
+    chip.textContent = i < currentStep ? `✓ Step ${i+1}` : `Step ${i+1}`;
+    chipsEl.appendChild(chip);
+  });
+}
+
+function renderStepContent() {
+  const step = currentTopic.steps[currentStep];
+  qaContext = [];
+  scoreRecorded = false;
+
+  document.getElementById('grammar-tag').textContent = step.grammar;
+  document.getElementById('q-jp').textContent = step.jp;
+  document.getElementById('q-hint').textContent = step.hint;
+
+  if (step.context) {
+    document.getElementById('context-note').style.display = 'block';
+    document.getElementById('context-text').textContent = step.context;
+  } else {
+    document.getElementById('context-note').style.display = 'none';
+  }
+
+  document.getElementById('user-answer').value = '';
+  document.getElementById('feedback-card').classList.remove('show');
+  document.getElementById('error-msg').style.display = 'none';
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('submit-btn').textContent = '確認する';
+  document.getElementById('qa-history').innerHTML = '';
+  document.getElementById('qa-input').value = '';
+  document.getElementById('score-slider').value = 70;
+  document.getElementById('score-display-num').textContent = '70';
+  document.getElementById('score-saved-msg').style.display = 'none';
+  document.getElementById('record-btn').disabled = false;
+  document.getElementById('record-btn').textContent = 'このスコアで記録する';
+
+  // Show previous score history
+  renderScoreHistory();
+
+  sessionData.grammarPatterns.add(step.grammar);
+}
+
+function renderScoreHistory() {
+  const scores = getScores();
+  const attempts = scores[currentQuestionId] || [];
+  const row = document.getElementById('score-history-row');
+  row.innerHTML = '';
+
+  if (!attempts.length) {
+    row.innerHTML = '<span>初回挑戦</span>';
+    return;
+  }
+
+  const last = attempts[attempts.length - 1].score;
+  const trend = getTrend(attempts);
+  const rolling = getRolling3Avg(attempts);
+  const personalAvg = getPersonalAverage(scores);
+
+  const trendLabels = { up: '↑ 上昇中', down: '↓ 下降中', stable: '→ 横ばい', new: '初回' };
+  const trendClasses = { up: 'trend-up', down: 'trend-down', stable: 'trend-stable', new: 'trend-new' };
+
+  row.innerHTML = `
+    <span>前回: <strong>${last}%</strong></span>
+    <span class="trend-badge ${trendClasses[trend]}">${trendLabels[trend]}</span>
+    ${attempts.length >= 3 ? `<span>直近3回平均: <strong>${rolling}%</strong></span>` : `<span>${attempts.length}回記録済</span>`}
+    ${personalAvg !== null && rolling < personalAvg ? '<span class="review-flag">⚠ 復習対象</span>' : ''}
+  `;
+}
+
+// ══════════════════════════════════════════
+// SUBMIT ANSWER
+// ══════════════════════════════════════════
+function submitAnswer() {
+  const answer = document.getElementById('user-answer').value.trim();
+  if (!answer) {
+    document.getElementById('error-msg').style.display = 'block';
+    return;
+  }
+  document.getElementById('error-msg').style.display = 'none';
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('submit-btn').textContent = '回答済み';
+
+  const step = currentTopic.steps[currentStep];
+  const isLastStep = isReviewMode
+    ? reviewIndex >= reviewQueue.length - 1
+    : currentStep >= currentTopic.steps.length - 1;
+  const nextStepData = (!isReviewMode && !isLastStep) ? currentTopic.steps[currentStep + 1] : null;
+
+  document.getElementById('fb-model').textContent = step.model;
+  document.getElementById('fb-grammar').textContent = step.grammar_tip;
+
+  const vocabList = document.getElementById('vocab-list');
+  vocabList.innerHTML = '';
+  if (step.vocab && step.vocab.length > 0) {
+    document.getElementById('vocab-section').style.display = 'block';
+    step.vocab.forEach(v => {
+      const item = document.createElement('div');
+      item.className = 'vocab-item';
+      item.innerHTML = `<div class="vocab-term">${v.term}</div><div class="vocab-desc">${v.desc}</div>`;
+      vocabList.appendChild(item);
+    });
+  } else {
+    document.getElementById('vocab-section').style.display = 'none';
+  }
+
+  if (nextStepData) {
+    document.getElementById('next-preview-section').style.display = 'block';
+    document.getElementById('fb-next').textContent = nextStepData.jp;
+  } else {
+    document.getElementById('next-preview-section').style.display = 'none';
+  }
+
+  document.getElementById('next-btn').textContent = isLastStep ? 'セット完了 🎉' : '次のステップへ →';
+  document.getElementById('feedback-card').classList.add('show');
+
+  qaContext = [{ role: 'user', content: `問題: ${step.jp}\n模範解答: ${step.model}\n私の回答: ${answer}` }];
+
+  // AI scoring
+  if (getApiKey()) {
+    document.getElementById('ai-score-loading').style.display = 'block';
+    document.getElementById('score-main').style.display = 'none';
+    aiScore(answer, step).then(score => {
+      document.getElementById('ai-score-loading').style.display = 'none';
+      document.getElementById('score-main').style.display = 'block';
+      if (score !== null) {
+        document.getElementById('score-slider').value = score;
+        document.getElementById('score-display-num').textContent = score;
+        document.getElementById('ai-score-label').style.display = 'block';
+      }
+    });
+  }
+}
+
+// ══════════════════════════════════════════
+// SCORING
+// ══════════════════════════════════════════
+function updateScoreDisplay(val) {
+  document.getElementById('score-display-num').textContent = val;
+}
+
+function recordScore() {
+  if (scoreRecorded) return;
+  const score = parseInt(document.getElementById('score-slider').value);
+  saveScoreEntry(currentQuestionId, score);
+  scoreRecorded = true;
+  document.getElementById('record-btn').disabled = true;
+  document.getElementById('record-btn').textContent = '記録済み ✅';
+  document.getElementById('score-saved-msg').style.display = 'block';
+  renderScoreHistory();
+}
+
+// ══════════════════════════════════════════
+// Q&A
+// ══════════════════════════════════════════
+async function sendQuestion() {
+  const input = document.getElementById('qa-input');
+  const question = input.value.trim();
+  if (!question) return;
+
+  const step = currentTopic.steps[currentStep];
+  const sendBtn = document.getElementById('qa-send');
+  const history = document.getElementById('qa-history');
+
+  const userBubble = document.createElement('div');
+  userBubble.className = 'qa-bubble user';
+  userBubble.textContent = question;
+  history.appendChild(userBubble);
+  history.scrollTop = history.scrollHeight;
+  input.value = '';
+  sendBtn.disabled = true;
+  sendBtn.textContent = '...';
+
+  const aiBubble = document.createElement('div');
+  aiBubble.className = 'qa-bubble ai';
+  aiBubble.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span>';
+  history.appendChild(aiBubble);
+  history.scrollTop = history.scrollHeight;
+
+  const systemPrompt = `あなたは英語口語トレーニングのコーチです。
+トレーニング内容:
+- 問題: ${step.jp}
+- 模範解答: ${step.model}
+- 文法フォーカス: ${step.grammar}
+- 文法解説: ${step.grammar_tip}
+学習者の質問に日本語で、簡潔かつ親切に答えてください。`;
+
+  const messages = [
+    ...qaContext,
+    { role: 'assistant', content: 'はい、何でも聞いてください！' },
+    { role: 'user', content: question }
+  ];
+
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    aiBubble.textContent = 'APIキーが設定されていません。右上の⚙から設定してください。';
+    sendBtn.disabled = false;
+    sendBtn.textContent = '送信';
+    return;
+  }
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 400, system: systemPrompt, messages })
+    });
+    const data = await res.json();
+    const reply = data.content.map(b => b.text || '').join('').trim();
+    aiBubble.textContent = reply;
+    qaContext.push(
+      { role: 'assistant', content: 'はい、何でも聞いてください！' },
+      { role: 'user', content: question },
+      { role: 'assistant', content: reply }
+    );
+  } catch(e) {
+    aiBubble.textContent = 'エラーが発生しました。APIキーを確認してください。';
+  }
+
+  sendBtn.disabled = false;
+  sendBtn.textContent = '送信';
+  history.scrollTop = history.scrollHeight;
+}
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+function nextStep() {
+  sessionData.stepsCompleted++;
+
+  if (isReviewMode) {
+    reviewIndex++;
+    if (reviewIndex >= reviewQueue.length) {
+      showComplete();
+    } else {
+      renderReviewStep();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    return;
+  }
+
+  if (currentStep >= currentTopic.steps.length - 1) {
+    showComplete();
+    return;
+  }
+  currentStep++;
+  saveProgress();
+  renderStep();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function skipQuestion() {
+  if (isReviewMode) {
+    reviewIndex++;
+    if (reviewIndex >= reviewQueue.length) { showComplete(); return; }
+    renderReviewStep();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  if (currentStep >= currentTopic.steps.length - 1) { showComplete(); return; }
+  currentStep++;
+  saveProgress();
+  renderStep();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showComplete() {
+  clearProgress();
+  document.getElementById('sum-steps').textContent = sessionData.stepsCompleted;
+  document.getElementById('sum-grammar').textContent = sessionData.grammarPatterns.size;
+  document.getElementById('sum-topic').textContent = isReviewMode ? '復習' : currentTopic.label.split('(')[0].trim();
+  showScreen('complete-screen');
+}
+
+function restartTraining() {
+  initStartScreen();
+  showScreen('start-screen');
+}
+
+// ══════════════════════════════════════════
+// STATS SCREEN
+// ══════════════════════════════════════════
+function showStats() {
+  const scores = getScores();
+  const allAttempts = getAllAttempts(scores);
+  const personalAvg = getPersonalAverage(scores);
+  const reviewQueueIds = getReviewQueue(scores);
+  const grammarAvgs = getGrammarAverages(scores);
+
+  const el = document.getElementById('stats-content');
+
+  if (!allAttempts.length) {
+    el.innerHTML = '<div class="no-data-msg">まだ記録がありません。<br>トレーニングを始めて採点を記録しましょう！</div>';
+    showScreen('stats-screen');
+    return;
+  }
+
+  document.getElementById('stats-subtitle').textContent = `${allAttempts.length}回の回答を分析しました`;
+
+  const uniqueQuestions = Object.keys(scores).length;
+  const totalQuestions = TOPICS.reduce((a, t) => a + t.steps.length, 0);
+
+  let html = `
+    <div class="overview-grid">
+      <div class="overview-card">
+        <div class="overview-num">${personalAvg}%</div>
+        <div class="overview-label">個人平均スコア</div>
+      </div>
+      <div class="overview-card">
+        <div class="overview-num">${uniqueQuestions}/${totalQuestions}</div>
+        <div class="overview-label">挑戦済み問題数</div>
+      </div>
+      <div class="overview-card">
+        <div class="overview-num" style="color:${reviewQueueIds.length > 0 ? 'var(--error)' : 'var(--success)'}">${reviewQueueIds.length}</div>
+        <div class="overview-label">復習が必要な問題</div>
+      </div>
+    </div>
+  `;
+
+  // Grammar averages
+  if (grammarAvgs.length) {
+    html += `<div class="section-title">文法パターン別 平均スコア</div>`;
+    html += `<table class="grammar-table"><thead><tr><th>文法パターン</th><th>平均</th><th></th><th>回数</th></tr></thead><tbody>`;
+    grammarAvgs.forEach(({ grammar, avg, count }) => {
+      const barClass = avg >= 75 ? 'high' : avg >= 50 ? 'mid' : 'low';
+      const color = avg >= 75 ? 'var(--success)' : avg >= 50 ? 'var(--accent)' : 'var(--error)';
+      html += `<tr>
+        <td>${grammar}</td>
+        <td style="color:${color};font-weight:600">${avg}%</td>
+        <td><div class="score-bar-wrap"><div class="score-bar-track"><div class="score-bar-fill ${barClass}" style="width:${avg}%"></div></div></div></td>
+        <td style="color:var(--text-muted)">${count}回</td>
+      </tr>`;
+    });
+    html += `</tbody></table>`;
+  }
+
+  // Question details
+  html += `<div class="section-title">問題別 詳細</div>`;
+
+  for (const topic of TOPICS) {
+    topic.steps.forEach((step, idx) => {
+      const qId = `${topic.id}_${idx}`;
+      const attempts = scores[qId] || [];
+      if (!attempts.length) return;
+
+      const rolling = getRolling3Avg(attempts);
+      const trend = getTrend(attempts);
+      const last = attempts[attempts.length - 1].score;
+      const isReview = reviewQueueIds.includes(qId);
+
+      const trendLabels = { up: '↑ 上昇中', down: '↓ 下降中', stable: '→ 横ばい', new: '初回' };
+      const trendClasses = { up: 'trend-up', down: 'trend-down', stable: 'trend-stable', new: 'trend-new' };
+      const color = last >= 75 ? 'var(--success)' : last >= 50 ? 'var(--accent)' : 'var(--error)';
+
+      html += `<div class="question-row">
+        <div class="question-row-top">
+          <span class="question-row-grammar">${step.grammar}</span>
+          <span class="question-row-score" style="color:${color}">${last}%</span>
+        </div>
+        <div class="question-row-text">${step.jp}</div>
+        <div class="question-row-meta">
+          <span class="trend-badge ${trendClasses[trend]}">${trendLabels[trend]}</span>
+          <span class="attempts-label">${attempts.length}回挑戦</span>
+          ${attempts.length >= 3 ? `<span class="attempts-label">直近3回: ${rolling}%</span>` : ''}
+          ${isReview ? '<span class="review-flag">⚠ 復習対象</span>' : ''}
+        </div>
+      </div>`;
+    });
+  }
+
+  el.innerHTML = html;
+  showScreen('stats-screen');
+}
+
+// ══════════════════════════════════════════
+// EVENT LISTENERS
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  initStartScreen();
+  updateApiKeyStatus();
+
+  document.getElementById('user-answer').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitAnswer(); }
+  });
+});
+</script>
+</body>
+</html>
