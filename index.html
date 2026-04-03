@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Speaking Trainer</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
   :root {
     --bg: #0f0e0c;
@@ -322,6 +323,15 @@
     <p>Anthropic APIキーを設定するとAI採点と質問応答機能が使えます。<br>キーはブラウザのlocalStorageにのみ保存されます。</p>
     <label>Anthropic API Key</label>
     <input type="password" id="api-key-input" placeholder="sk-ant-..." />
+    <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+    <label>同期コード <span style="font-size:11px;color:var(--text-muted);font-weight:400">— デバイス間でスコアを共有</span></label>
+    <div style="display:flex;gap:8px;margin-top:6px">
+      <input type="text" id="sync-id-input" placeholder="コードを入力..." style="flex:1;font-size:12px;font-family:monospace" />
+      <button class="btn-ghost" onclick="applySyncId()" style="white-space:nowrap">適用</button>
+      <button class="btn-ghost" onclick="copySyncId()" style="white-space:nowrap">コピー</button>
+    </div>
+    <p style="font-size:11px;color:var(--text-muted);margin-top:6px;line-height:1.5">別のデバイスで同じコードを入力→適用すると、スコアが同期されます。</p>
+    <div id="sync-status" style="font-size:12px;margin-top:6px;min-height:16px"></div>
     <div class="modal-actions">
       <button class="btn-ghost" onclick="closeSettings()">キャンセル</button>
       <button class="btn-primary" onclick="saveApiKeySetting()">保存</button>
@@ -2026,6 +2036,8 @@ function getApiKey() {
 }
 function showSettings() {
   document.getElementById('api-key-input').value = getApiKey();
+  document.getElementById('sync-id-input').value = getSyncUserId();
+  document.getElementById('sync-status').textContent = '';
   document.getElementById('settings-modal').classList.add('show');
 }
 function closeSettings() {
@@ -2151,6 +2163,7 @@ function saveScoreEntry(questionId, score) {
   if (!scores[questionId]) scores[questionId] = [];
   scores[questionId].push({ date: Date.now(), score });
   try { localStorage.setItem('st_scores', JSON.stringify(scores)); } catch(e) {}
+  pushToCloud();
 }
 function getProgress() {
   try { const s = localStorage.getItem('st_progress'); return s ? JSON.parse(s) : null; } catch(e) { return null; }
@@ -2846,11 +2859,77 @@ function showStats() {
 }
 
 // ══════════════════════════════════════════
+// SUPABASE SYNC
+// ══════════════════════════════════════════
+const SUPABASE_URL = 'https://dvwchgcilsuucyrfsupx.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_2vx85aye6elG9cOlXHYksQ_Ok8RHV27';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+function getSyncUserId() {
+  let id = localStorage.getItem('st_sync_id');
+  if (!id) { id = crypto.randomUUID(); localStorage.setItem('st_sync_id', id); }
+  return id;
+}
+
+function setSyncStatus(msg, type) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = type === 'error' ? '#e87a7a' : 'var(--success)';
+}
+
+async function pushToCloud() {
+  try {
+    const userId = getSyncUserId();
+    const scores = getScores();
+    const { error } = await sb.from('user_sync').upsert({
+      user_id: userId, scores_json: scores, updated_at: new Date().toISOString()
+    });
+    if (!error) setSyncStatus('クラウドに同期済み ✓', 'ok');
+  } catch(e) {}
+}
+
+async function pullFromCloud() {
+  try {
+    const userId = getSyncUserId();
+    const { data, error } = await sb.from('user_sync').select('scores_json').eq('user_id', userId).single();
+    if (error || !data) return;
+    const remote = data.scores_json || {};
+    const local = getScores();
+    const merged = { ...local };
+    for (const [qid, entries] of Object.entries(remote)) {
+      if (!merged[qid]) { merged[qid] = entries; continue; }
+      const dates = new Set(merged[qid].map(e => e.date));
+      for (const e of entries) {
+        if (!dates.has(e.date)) { merged[qid].push(e); dates.add(e.date); }
+      }
+      merged[qid].sort((a, b) => a.date - b.date);
+    }
+    try { localStorage.setItem('st_scores', JSON.stringify(merged)); } catch(e) {}
+    initStartScreen();
+  } catch(e) {}
+}
+
+function copySyncId() {
+  const id = getSyncUserId();
+  navigator.clipboard.writeText(id).then(() => setSyncStatus('コードをコピーしました ✓', 'ok'));
+}
+
+function applySyncId() {
+  const input = document.getElementById('sync-id-input').value.trim();
+  if (!input) return;
+  localStorage.setItem('st_sync_id', input);
+  setSyncStatus('コードを適用中...', 'ok');
+  pullFromCloud().then(() => setSyncStatus('同期完了 ✓', 'ok'));
+}
+
+// ══════════════════════════════════════════
 // EVENT LISTENERS
 // ══════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
   initStartScreen();
   updateApiKeyStatus();
+  pullFromCloud();
 
   document.getElementById('user-answer').addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitAnswer(); }
