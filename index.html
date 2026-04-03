@@ -271,6 +271,9 @@
   .usage-since { font-size:11px; color:var(--text-muted); margin-bottom:10px; }
   .usage-calls { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
   .usage-call-tag { font-size:11px; background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:3px 8px; color:var(--text-muted); }
+  .usage-device-block { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:10px 12px; margin-bottom:8px; }
+  .usage-device-header { display:flex; align-items:center; }
+  .usage-device-id { font-family:monospace; font-size:12px; color:var(--text-muted); }
 
   /* Password Screen */
   .pw-overlay { display:flex; position:fixed; inset:0; background:var(--bg); z-index:200; align-items:center; justify-content:center; }
@@ -368,17 +371,7 @@
     <div id="sync-status" style="font-size:12px;margin-top:6px;min-height:16px"></div>
     <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
     <label>API使用量 <span style="font-size:11px;color:var(--text-muted);font-weight:400">— Claude Haiku 4.5</span></label>
-    <div class="usage-panel" id="usage-panel">
-      <div class="usage-cost" id="usage-cost">$0.0000</div>
-      <div class="usage-cost-sub" id="usage-cost-sub">≈ ¥0</div>
-      <div class="usage-grid">
-        <div class="usage-item"><div class="usage-item-label">Input tokens</div><div class="usage-item-val" id="usage-input">0</div></div>
-        <div class="usage-item"><div class="usage-item-label">Output tokens</div><div class="usage-item-val" id="usage-output">0</div></div>
-      </div>
-      <div class="usage-calls" id="usage-calls"></div>
-      <div class="usage-since" id="usage-since"></div>
-      <button class="btn-ghost" style="font-size:12px;padding:6px 12px" onclick="resetApiUsage()">🗑 リセット</button>
-    </div>
+    <div class="usage-panel" id="usage-panel"></div>
     <div class="modal-actions">
       <button class="btn-ghost" onclick="closeSettings()">キャンセル</button>
       <button class="btn-primary" onclick="saveApiKeySetting()">保存</button>
@@ -2240,26 +2233,59 @@ function resetApiUsage() {
   renderApiUsage();
 }
 function renderApiUsage() {
-  const u = getApiUsage();
   const INPUT_PRICE = 0.80 / 1_000_000;
   const OUTPUT_PRICE = 4.00 / 1_000_000;
-  const USD = u.inputTokens * INPUT_PRICE + u.outputTokens * OUTPUT_PRICE;
-  const JPY = Math.round(USD * 150);
+  const callLabels = { score: 'AI採点', rewrite: '口語化', qa: 'Q&A', generate: 'AI強化' };
 
-  document.getElementById('usage-cost').textContent = '$' + USD.toFixed(4);
-  document.getElementById('usage-cost-sub').textContent = '≈ ¥' + JPY.toLocaleString();
-  document.getElementById('usage-input').textContent = u.inputTokens.toLocaleString();
-  document.getElementById('usage-output').textContent = u.outputTokens.toLocaleString();
+  function calcUSD(u) {
+    return u.inputTokens * INPUT_PRICE + u.outputTokens * OUTPUT_PRICE;
+  }
+  function deviceBlock(u, label, isCurrent) {
+    const usd = calcUSD(u);
+    const jpy = Math.round(usd * 150);
+    const callTags = Object.entries(u.calls || {}).map(([k, v]) =>
+      `<span class="usage-call-tag">${callLabels[k] || k}: ${v}回</span>`
+    ).join('') || '<span class="usage-call-tag">利用なし</span>';
+    const since = new Date(u.since);
+    const sinceStr = `${since.getFullYear()}/${since.getMonth()+1}/${since.getDate()}`;
+    const currentBadge = isCurrent
+      ? '<span style="font-size:10px;background:rgba(122,232,176,0.15);color:var(--success);border:1px solid rgba(122,232,176,0.3);border-radius:6px;padding:2px 6px;margin-left:6px">このデバイス</span>'
+      : '';
+    return `
+      <div class="usage-device-block">
+        <div class="usage-device-header">
+          <span class="usage-device-id">${label}</span>${currentBadge}
+        </div>
+        <div style="display:flex;gap:10px;align-items:baseline;margin:6px 0 4px">
+          <span style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--accent)">$${usd.toFixed(4)}</span>
+          <span style="font-size:12px;color:var(--text-muted)">≈ ¥${jpy.toLocaleString()}</span>
+        </div>
+        <div style="display:flex;gap:8px;font-size:12px;color:var(--text-muted);margin-bottom:6px">
+          <span>In: ${(u.inputTokens||0).toLocaleString()}</span>
+          <span>Out: ${(u.outputTokens||0).toLocaleString()}</span>
+        </div>
+        <div class="usage-calls">${callTags}</div>
+        <div class="usage-since">計測開始: ${sinceStr}</div>
+      </div>`;
+  }
 
-  const callLabels = { score: 'AI採点', rewrite: '口語化提案', qa: 'Q&A', generate: 'AI強化生成' };
-  const callsEl = document.getElementById('usage-calls');
-  callsEl.innerHTML = Object.entries(u.calls).map(([k, v]) =>
-    `<span class="usage-call-tag">${callLabels[k] || k}: ${v}回</span>`
-  ).join('') || '<span class="usage-call-tag" style="color:var(--text-muted)">まだ利用なし</span>';
+  const currentUserId = getSyncUserId();
+  const currentDeviceId = currentUserId.substring(0, 8);
+  const localUsage = getApiUsage();
 
-  const since = new Date(u.since);
-  document.getElementById('usage-since').textContent =
-    `計測開始: ${since.getFullYear()}/${since.getMonth()+1}/${since.getDate()}`;
+  // クラウドから他デバイスの使用量を取得
+  const scores = getScores();
+  const allDevices = scores.__meta__?.devices || {};
+
+  let html = deviceBlock(localUsage, currentDeviceId, true);
+
+  for (const [deviceId, deviceData] of Object.entries(allDevices)) {
+    if (deviceId === currentDeviceId) continue; // 自分はすでに表示
+    html += deviceBlock(deviceData, deviceId, false);
+  }
+
+  document.getElementById('usage-panel').innerHTML = html +
+    `<button class="btn-ghost" style="font-size:12px;padding:6px 12px;margin-top:8px" onclick="resetApiUsage()">🗑 このデバイスをリセット</button>`;
 }
 function getProgress() {
   try { const s = localStorage.getItem('st_progress'); return s ? JSON.parse(s) : null; } catch(e) { return null; }
@@ -2288,7 +2314,7 @@ function getQuestionById(questionId) {
 }
 
 function getAllAttempts(scores) {
-  return Object.values(scores).flat().map(s => s.score);
+  return Object.values(scores).filter(v => Array.isArray(v)).flat().map(s => s.score);
 }
 
 function getPersonalAverage(scores) {
@@ -2317,7 +2343,7 @@ function getReviewQueue(scores) {
   if (personalAvg === null) return [];
   const queue = [];
   for (const [qId, attempts] of Object.entries(scores)) {
-    if (!attempts.length) continue;
+    if (!Array.isArray(attempts) || !attempts.length) continue;
     const rolling = getRolling3Avg(attempts);
     if (rolling < personalAvg) queue.push({ qId, rolling, diff: personalAvg - rolling });
   }
@@ -2328,7 +2354,7 @@ function getReviewQueue(scores) {
 function getGrammarAverages(scores) {
   const grammarMap = {};
   for (const [qId, attempts] of Object.entries(scores)) {
-    if (!attempts.length) continue;
+    if (!Array.isArray(attempts) || !attempts.length) continue;
     const q = getQuestionById(qId);
     if (!q) continue;
     const grammar = q.step.grammar;
@@ -3201,8 +3227,20 @@ function setSyncStatus(msg, type) {
 }
 
 function mergeScores(base, remote) {
-  const merged = { ...base };
+  // __meta__ はデバイス別使用量を格納する特殊キー — スコアとは別にマージ
+  const baseMeta = base.__meta__ || { devices: {} };
+  const remoteMeta = remote.__meta__ || { devices: {} };
+  const mergedDevices = { ...remoteMeta.devices, ...baseMeta.devices }; // ローカルを優先
+
+  const merged = {};
+  merged.__meta__ = { devices: mergedDevices };
+
+  for (const [qid, entries] of Object.entries(base)) {
+    if (qid === '__meta__') continue;
+    merged[qid] = entries;
+  }
   for (const [qid, entries] of Object.entries(remote)) {
+    if (qid === '__meta__' || !Array.isArray(entries)) continue;
     if (!merged[qid]) { merged[qid] = entries; continue; }
     const dates = new Set(merged[qid].map(e => e.date));
     for (const e of entries) {
@@ -3220,6 +3258,12 @@ async function pushToCloud() {
     // 競合防止：push前にクラウドの最新データをfetchしてマージ
     const { data } = await sb.from('user_sync').select('scores_json').eq('user_id', userId).single();
     const merged = mergeScores(getScores(), data?.scores_json || {});
+
+    // このデバイスの使用量を __meta__ に記録
+    const deviceId = userId.substring(0, 8);
+    if (!merged.__meta__) merged.__meta__ = { devices: {} };
+    merged.__meta__.devices[deviceId] = { ...getApiUsage(), lastSeen: new Date().toISOString() };
+
     try { localStorage.setItem('st_scores', JSON.stringify(merged)); } catch(e) {}
     const payload = { user_id: userId, scores_json: merged, updated_at: new Date().toISOString() };
     if (apiKey) payload.api_key = apiKey;
