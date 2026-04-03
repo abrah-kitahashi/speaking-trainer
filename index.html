@@ -261,6 +261,16 @@
   .api-key-status { font-size:11px; margin-top:2px; }
   .api-key-status.set { color:var(--success); }
   .api-key-status.unset { color:var(--warning); }
+  .usage-panel { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px; margin-top:4px; }
+  .usage-cost { font-family:'DM Serif Display',serif; font-size:24px; color:var(--accent); margin-bottom:2px; }
+  .usage-cost-sub { font-size:12px; color:var(--text-muted); margin-bottom:12px; }
+  .usage-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
+  .usage-item { background:var(--surface); border-radius:8px; padding:8px 10px; }
+  .usage-item-label { font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:3px; }
+  .usage-item-val { font-size:13px; font-weight:600; color:var(--text); }
+  .usage-since { font-size:11px; color:var(--text-muted); margin-bottom:10px; }
+  .usage-calls { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+  .usage-call-tag { font-size:11px; background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:3px 8px; color:var(--text-muted); }
 
   /* Password Screen */
   .pw-overlay { display:flex; position:fixed; inset:0; background:var(--bg); z-index:200; align-items:center; justify-content:center; }
@@ -356,6 +366,19 @@
     </div>
     <p style="font-size:11px;color:var(--text-muted);margin-top:6px;line-height:1.5">別のデバイスで同じコードを入力→適用すると、スコアが同期されます。</p>
     <div id="sync-status" style="font-size:12px;margin-top:6px;min-height:16px"></div>
+    <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+    <label>API使用量 <span style="font-size:11px;color:var(--text-muted);font-weight:400">— Claude Haiku 4.5</span></label>
+    <div class="usage-panel" id="usage-panel">
+      <div class="usage-cost" id="usage-cost">$0.0000</div>
+      <div class="usage-cost-sub" id="usage-cost-sub">≈ ¥0</div>
+      <div class="usage-grid">
+        <div class="usage-item"><div class="usage-item-label">Input tokens</div><div class="usage-item-val" id="usage-input">0</div></div>
+        <div class="usage-item"><div class="usage-item-label">Output tokens</div><div class="usage-item-val" id="usage-output">0</div></div>
+      </div>
+      <div class="usage-calls" id="usage-calls"></div>
+      <div class="usage-since" id="usage-since"></div>
+      <button class="btn-ghost" style="font-size:12px;padding:6px 12px" onclick="resetApiUsage()">🗑 リセット</button>
+    </div>
     <div class="modal-actions">
       <button class="btn-ghost" onclick="closeSettings()">キャンセル</button>
       <button class="btn-primary" onclick="saveApiKeySetting()">保存</button>
@@ -2068,6 +2091,7 @@ function showSettings() {
   document.getElementById('api-key-input').value = getApiKey();
   document.getElementById('sync-id-input').value = getSyncUserId();
   document.getElementById('sync-status').textContent = '';
+  renderApiUsage();
   document.getElementById('settings-modal').classList.add('show');
 }
 function closeSettings() {
@@ -2129,6 +2153,7 @@ async function aiScore(userAnswer, step) {
       })
     });
     const data = await res.json();
+    trackApiUsage(data.usage?.input_tokens, data.usage?.output_tokens, 'score');
     const text = data.content?.[0]?.text?.trim() || '';
     const json = JSON.parse(text.match(/\{[\s\S]*\}/)?.[0] || '{}');
     const score = parseInt(json.score);
@@ -2174,6 +2199,7 @@ async function aiSuggestRewrite(userAnswer, step) {
       })
     });
     const data = await res.json();
+    trackApiUsage(data.usage?.input_tokens, data.usage?.output_tokens, 'rewrite');
     const text = data.content?.[0]?.text?.trim() || '';
     const json = JSON.parse(text.match(/\{[\s\S]*\}/)?.[0] || '{}');
     return { rewrite: json.rewrite || null, tip: json.tip || null };
@@ -2194,6 +2220,46 @@ function saveScoreEntry(questionId, score) {
   scores[questionId].push({ date: Date.now(), score });
   try { localStorage.setItem('st_scores', JSON.stringify(scores)); } catch(e) {}
   pushToCloud();
+}
+function getApiUsage() {
+  try {
+    const s = localStorage.getItem('st_api_usage');
+    return s ? JSON.parse(s) : { inputTokens: 0, outputTokens: 0, calls: {}, since: new Date().toISOString() };
+  } catch(e) { return { inputTokens: 0, outputTokens: 0, calls: {}, since: new Date().toISOString() }; }
+}
+function trackApiUsage(inputTokens, outputTokens, callType) {
+  const u = getApiUsage();
+  u.inputTokens += (inputTokens || 0);
+  u.outputTokens += (outputTokens || 0);
+  u.calls[callType] = (u.calls[callType] || 0) + 1;
+  try { localStorage.setItem('st_api_usage', JSON.stringify(u)); } catch(e) {}
+}
+function resetApiUsage() {
+  if (!confirm('API使用量の記録をリセットしますか？')) return;
+  localStorage.setItem('st_api_usage', JSON.stringify({ inputTokens: 0, outputTokens: 0, calls: {}, since: new Date().toISOString() }));
+  renderApiUsage();
+}
+function renderApiUsage() {
+  const u = getApiUsage();
+  const INPUT_PRICE = 0.80 / 1_000_000;
+  const OUTPUT_PRICE = 4.00 / 1_000_000;
+  const USD = u.inputTokens * INPUT_PRICE + u.outputTokens * OUTPUT_PRICE;
+  const JPY = Math.round(USD * 150);
+
+  document.getElementById('usage-cost').textContent = '$' + USD.toFixed(4);
+  document.getElementById('usage-cost-sub').textContent = '≈ ¥' + JPY.toLocaleString();
+  document.getElementById('usage-input').textContent = u.inputTokens.toLocaleString();
+  document.getElementById('usage-output').textContent = u.outputTokens.toLocaleString();
+
+  const callLabels = { score: 'AI採点', rewrite: '口語化提案', qa: 'Q&A', generate: 'AI強化生成' };
+  const callsEl = document.getElementById('usage-calls');
+  callsEl.innerHTML = Object.entries(u.calls).map(([k, v]) =>
+    `<span class="usage-call-tag">${callLabels[k] || k}: ${v}回</span>`
+  ).join('') || '<span class="usage-call-tag" style="color:var(--text-muted)">まだ利用なし</span>';
+
+  const since = new Date(u.since);
+  document.getElementById('usage-since').textContent =
+    `計測開始: ${since.getFullYear()}/${since.getMonth()+1}/${since.getDate()}`;
 }
 function getProgress() {
   try { const s = localStorage.getItem('st_progress'); return s ? JSON.parse(s) : null; } catch(e) { return null; }
@@ -2751,6 +2817,7 @@ JSONのみ返答（他テキスト不要）:
       })
     });
     const data = await res.json();
+    trackApiUsage(data.usage?.input_tokens, data.usage?.output_tokens, 'generate');
     const text = data.content?.[0]?.text?.trim() || '';
     const arr = JSON.parse(text.match(/\[[\s\S]*\]/)?.[0] || '[]');
     return arr.filter(q => q.jp && q.model).map(q => ({
@@ -2909,6 +2976,7 @@ async function sendQuestion() {
       body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 400, system: systemPrompt, messages })
     });
     const data = await res.json();
+    trackApiUsage(data.usage?.input_tokens, data.usage?.output_tokens, 'qa');
     const reply = data.content.map(b => b.text || '').join('').trim();
     aiBubble.textContent = reply;
     qaContext.push(
