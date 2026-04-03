@@ -2883,9 +2883,9 @@ async function pushToCloud() {
     const userId = getSyncUserId();
     const scores = getScores();
     const apiKey = getApiKey();
-    const { error } = await sb.from('user_sync').upsert({
-      user_id: userId, scores_json: scores, api_key: apiKey, updated_at: new Date().toISOString()
-    });
+    const payload = { user_id: userId, scores_json: scores, updated_at: new Date().toISOString() };
+    if (apiKey) payload.api_key = apiKey; // 空の場合はクラウドを上書きしない
+    const { error } = await sb.from('user_sync').upsert(payload);
     if (!error) setSyncStatus('クラウドに同期済み ✓', 'ok');
     else setSyncStatus('同期失敗: ' + error.message, 'error');
   } catch(e) { setSyncStatus('同期エラー: ' + e.message, 'error'); }
@@ -2896,9 +2896,13 @@ async function pullFromCloud() {
     const userId = getSyncUserId();
     const { data, error } = await sb.from('user_sync').select('scores_json, api_key').eq('user_id', userId).single();
     if (error || !data) {
-      // クラウドにデータなし → ローカルをpush
       await pushToCloud();
       return;
+    }
+    // APIキーをスコアマージより先に反映（pushToCloud時に正しいキーが使われるよう）
+    if (data.api_key && !getApiKey()) {
+      localStorage.setItem('st_api_key', data.api_key);
+      updateApiKeyStatus();
     }
     const remote = data.scores_json || {};
     const local = getScores();
@@ -2912,13 +2916,7 @@ async function pullFromCloud() {
       merged[qid].sort((a, b) => a.date - b.date);
     }
     try { localStorage.setItem('st_scores', JSON.stringify(merged)); } catch(e) {}
-    // APIキーが未設定なら同期
-    if (data.api_key && !getApiKey()) {
-      localStorage.setItem('st_api_key', data.api_key);
-      updateApiKeyStatus();
-    }
     initStartScreen();
-    // マージ後の最新状態をクラウドに反映
     await pushToCloud();
   } catch(e) { setSyncStatus('同期エラー: ' + e.message, 'error'); }
 }
