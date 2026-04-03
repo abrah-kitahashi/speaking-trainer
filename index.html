@@ -278,6 +278,20 @@
   .ai-score-loading { display:flex; align-items:center; gap:8px; color:var(--text-muted); font-size:13px; padding:6px 0 10px; }
   .ai-score-label { font-size:11px; color:var(--accent2); text-transform:uppercase; letter-spacing:0.1em; }
   .ai-feedback-box { background:var(--surface2); border-left:3px solid var(--accent2); border-radius:0 8px 8px 0; padding:10px 13px; font-size:13px; color:var(--text-muted); line-height:1.6; margin-top:8px; }
+
+  /* AI Reinforcement Mode */
+  .ai-loading-overlay { display:none; position:fixed; inset:0; background:rgba(15,14,12,0.85); z-index:150; align-items:center; justify-content:center; flex-direction:column; gap:16px; }
+  .ai-loading-overlay.show { display:flex; }
+  .ai-loading-box { text-align:center; }
+  .ai-loading-title { font-family:'DM Serif Display',serif; font-size:20px; color:var(--accent); margin-bottom:8px; }
+  .ai-loading-msg { font-size:14px; color:var(--text-muted); margin-top:12px; }
+  .ai-loading-sub { font-size:12px; color:var(--text-muted); margin-top:6px; opacity:0.7; }
+  .ai-mode-badge { display:inline-flex; align-items:center; gap:5px; background:rgba(139,106,255,0.15); color:#a78bfa; border:1px solid rgba(139,106,255,0.3); border-radius:10px; font-size:11px; font-weight:600; letter-spacing:0.08em; padding:3px 9px; text-transform:uppercase; }
+  .ai-reinforced-summary { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; margin:0 0 20px; text-align:left; }
+  .ai-reinforced-label { font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#a78bfa; margin-bottom:10px; }
+  .ai-reinforced-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .ai-reinforced-tag { background:rgba(139,106,255,0.1); color:#a78bfa; border:1px solid rgba(139,106,255,0.25); border-radius:8px; font-size:12px; padding:4px 10px; }
+  .btn-ai { background:rgba(139,106,255,0.15); color:#a78bfa; border:1px solid rgba(139,106,255,0.35); padding:12px 28px; border-radius: 10px; font-size:15px; font-weight:600; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.2s; display:none; }
 @media (max-width: 600px) {
   header { padding: 12px 16px; }
   main { padding: 12px 12px; }
@@ -294,6 +308,16 @@
 </style>
 </head>
 <body>
+<!-- AI Loading Overlay -->
+<div class="ai-loading-overlay" id="ai-loading-overlay">
+  <div class="ai-loading-box">
+    <div class="ai-loading-title">🤖 AI強化モード</div>
+    <div class="loading-dots" style="justify-content:center"><span></span><span></span><span></span></div>
+    <div class="ai-loading-msg" id="ai-loading-msg">弱点パターンを分析中...</div>
+    <div class="ai-loading-sub" id="ai-loading-sub"></div>
+  </div>
+</div>
+
 <!-- Password Screen -->
 <div class="pw-overlay" id="pw-overlay">
   <div class="pw-box">
@@ -367,6 +391,7 @@
       <button class="btn-main" onclick="startTraining(false)">トレーニング開始 →</button>
       <button class="btn-outline" id="resume-btn" onclick="startTraining(true)" style="display:none">↩ 続きから再開</button>
       <button class="btn-outline" id="review-btn" onclick="startReview()" style="display:none">🔁 復習モード</button>
+      <button class="btn-ai" id="ai-reinforce-btn" onclick="startAIReinforcement()">🤖 AI強化モード</button>
       <button class="btn-ghost" onclick="showStats()">📊 統計を見る</button>
       <div class="start-meta" id="resume-info"></div>
     </div>
@@ -504,16 +529,21 @@
 
   <!-- ══ Complete Screen ══ -->
   <div id="complete-screen" class="screen" style="text-align:center">
-    <div class="complete-icon">🎉</div>
-    <div class="complete-title">1セット完了！</div>
-    <p class="complete-sub">今日のトレーニングお疲れ様でした。<br>採点を記録して弱点を把握しましょう。</p>
+    <div class="complete-icon" id="complete-icon">🎉</div>
+    <div class="complete-title" id="complete-title">1セット完了！</div>
+    <p class="complete-sub" id="complete-sub">今日のトレーニングお疲れ様でした。<br>採点を記録して弱点を把握しましょう。</p>
     <div class="summary-grid">
       <div class="summary-card"><div class="summary-num" id="sum-steps">5</div><div class="summary-label">ステップ数</div></div>
       <div class="summary-card"><div class="summary-num" id="sum-grammar">3</div><div class="summary-label">文法パターン</div></div>
       <div class="summary-card"><div class="summary-num" id="sum-topic">―</div><div class="summary-label">今日のトピック</div></div>
     </div>
+    <div id="ai-reinforced-summary" class="ai-reinforced-summary" style="display:none">
+      <div class="ai-reinforced-label">🎯 今回強化したパターン</div>
+      <div class="ai-reinforced-tags" id="ai-reinforced-tags"></div>
+    </div>
     <div class="start-actions">
       <button class="btn-main" onclick="showStats()">📊 統計を見る</button>
+      <button class="btn-ai" id="complete-ai-btn" onclick="startAIReinforcement()" style="display:none">🤖 もう一度AI強化</button>
       <button class="btn-outline" onclick="restartTraining()">もう1セット →</button>
     </div>
   </div>
@@ -2179,6 +2209,10 @@ function clearProgress() {
 // ANALYTICS
 // ══════════════════════════════════════════
 function getQuestionById(questionId) {
+  if (aiGeneratedRegistry[questionId]) {
+    const step = aiGeneratedRegistry[questionId];
+    return { topic: { id: 'ai_reinforcement', label: 'AI強化', steps: [] }, step, stepIndex: 0 };
+  }
   const parts = questionId.split('_');
   const stepIndex = parseInt(parts[parts.length - 1]);
   const topicId = parts.slice(0, -1).join('_');
@@ -2249,6 +2283,10 @@ let currentTopic = null;
 let currentStep = 0;
 let currentQuestionId = null;
 let isReviewMode = false;
+let isAIMode = false;
+let aiSteps = [];
+let aiStepIndex = 0;
+let aiGeneratedRegistry = {};
 let openGroups = new Set();
 let reviewQueue = [];
 let reviewIndex = 0;
@@ -2375,6 +2413,17 @@ function initStartScreen() {
     const rb = document.getElementById('review-btn');
     rb.style.display = 'inline-block';
     rb.textContent = `🔁 復習モード（${reviewQueue.length}問）`;
+  }
+
+  const weakPatterns = getWeakGrammarPatterns(scores);
+  const aiBtn = document.getElementById('ai-reinforce-btn');
+  if (aiBtn) {
+    if (weakPatterns.length > 0 && getApiKey()) {
+      aiBtn.style.display = 'inline-block';
+      aiBtn.textContent = `🤖 AI強化モード（${weakPatterns.length}パターン）`;
+    } else {
+      aiBtn.style.display = 'none';
+    }
   }
 }
 
@@ -2640,6 +2689,167 @@ function recordScore() {
 }
 
 // ══════════════════════════════════════════
+// AI REINFORCEMENT MODE
+// ══════════════════════════════════════════
+
+function getWeakGrammarPatterns(scores) {
+  return getGrammarAverages(scores).filter(g => g.count >= 3 && g.avg < 70);
+}
+
+function getExampleStepsForGrammar(grammar) {
+  const examples = [];
+  for (const topic of TOPICS) {
+    for (const step of topic.steps) {
+      if (step.grammar === grammar) {
+        examples.push(step);
+        if (examples.length >= 3) return examples;
+      }
+    }
+  }
+  return examples;
+}
+
+async function generateQuestionsForPattern(grammar, examples, count) {
+  const apiKey = getApiKey();
+  if (!apiKey || !examples.length) return [];
+
+  const exampleText = examples.map((e, i) =>
+    `例${i + 1}: 日本語「${e.jp}」→ 英語「${e.model}」`
+  ).join('\n');
+  const grammarTip = examples[0]?.grammar_tip || '';
+
+  const prompt = `英語口語トレーニング用の新しい練習問題を${count}問作成してください。
+
+文法パターン: ${grammar}
+文法解説: ${grammarTip}
+
+既存問題の例（これらとは異なる内容で作る）:
+${exampleText}
+
+条件:
+- ビジネス英語（ローカライゼーション・出版・エンタメ業界）の文脈
+- 口語的で自然な英文
+- 必ず「${grammar}」の文法を使う
+- 例とは違う状況・フレーズを使う
+
+JSONのみ返答（他テキスト不要）:
+[{"jp":"日本語の問題文","model":"模範英語回答","hint":"文法ヒント一言（15字以内）"}]`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: count * 200,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text?.trim() || '';
+    const arr = JSON.parse(text.match(/\[[\s\S]*\]/)?.[0] || '[]');
+    return arr.filter(q => q.jp && q.model).map(q => ({
+      jp: q.jp, model: q.model, hint: q.hint || grammar,
+      grammar, grammar_tip: grammarTip, vocab: []
+    }));
+  } catch(e) {
+    return [];
+  }
+}
+
+function showAILoadingOverlay(show, patterns) {
+  const el = document.getElementById('ai-loading-overlay');
+  if (show) {
+    el.classList.add('show');
+    document.getElementById('ai-loading-msg').textContent = '弱点パターンを分析中...';
+    document.getElementById('ai-loading-sub').textContent =
+      patterns ? `対象: ${patterns.map(p => p.grammar).join('、')}` : '';
+  } else {
+    el.classList.remove('show');
+  }
+}
+
+async function startAIReinforcement() {
+  const scores = getScores();
+  const weak = getWeakGrammarPatterns(scores);
+
+  if (!getApiKey()) {
+    alert('AI強化モードにはAPIキーが必要です。\n設定ボタン（⚙）から入力してください。');
+    return;
+  }
+  if (!weak.length) {
+    alert('弱点パターンがまだ検出されていません。\n（条件: 同じ文法パターンを3回以上試して平均70点未満）');
+    return;
+  }
+
+  const targetPatterns = weak.slice(0, 4); // 最大4パターン × 2問 = 8問
+  showAILoadingOverlay(true, targetPatterns);
+
+  const generated = [];
+  for (let i = 0; i < targetPatterns.length; i++) {
+    const pattern = targetPatterns[i];
+    document.getElementById('ai-loading-msg').textContent =
+      `問題を生成中... (${i + 1}/${targetPatterns.length})`;
+    document.getElementById('ai-loading-sub').textContent = `「${pattern.grammar}」`;
+    const examples = getExampleStepsForGrammar(pattern.grammar);
+    const questions = await generateQuestionsForPattern(pattern.grammar, examples, 2);
+    generated.push(...questions);
+  }
+
+  showAILoadingOverlay(false);
+
+  if (!generated.length) {
+    alert('問題の生成に失敗しました。APIキーを確認してください。');
+    return;
+  }
+
+  // シャッフル
+  for (let i = generated.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [generated[i], generated[j]] = [generated[j], generated[i]];
+  }
+
+  // AI生成問題を登録（getQuestionById で参照可能に）
+  aiGeneratedRegistry = {};
+  generated.forEach((step, i) => {
+    aiGeneratedRegistry[`aiq_${step.grammar}_${i}`] = step;
+  });
+
+  isReviewMode = false;
+  isAIMode = true;
+  aiSteps = generated;
+  aiStepIndex = 0;
+
+  currentTopic = { id: 'ai_reinforcement', label: 'AI強化モード', steps: generated };
+  currentStep = 0;
+  sessionData = { topic: 'AI強化モード', stepsCompleted: 0, grammarPatterns: new Set() };
+
+  showScreen('training-screen');
+  renderAIStep();
+}
+
+function renderAIStep() {
+  currentQuestionId = `aiq_${aiSteps[aiStepIndex].grammar}_${aiStepIndex}`;
+  currentStep = aiStepIndex;
+  renderStepContent();
+
+  const modeLabel = `<span class="ai-mode-badge">🤖 AI強化</span>`;
+  document.getElementById('step-label').innerHTML =
+    `AI強化 ${aiStepIndex + 1} / ${aiSteps.length}`;
+  document.getElementById('topic-label').innerHTML = modeLabel;
+  document.getElementById('progress-fill').style.width =
+    `${((aiStepIndex + 1) / aiSteps.length) * 100}%`;
+
+  // ステップチップは非表示（問題数が可変のため）
+  document.getElementById('step-chips').innerHTML = '';
+}
+
+// ══════════════════════════════════════════
 // Q&A
 // ══════════════════════════════════════════
 async function sendQuestion() {
@@ -2720,6 +2930,14 @@ async function sendQuestion() {
 function nextStep() {
   sessionData.stepsCompleted++;
 
+  if (isAIMode) {
+    aiStepIndex++;
+    if (aiStepIndex >= aiSteps.length) { showComplete(); return; }
+    renderAIStep();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
   if (isReviewMode) {
     reviewIndex++;
     if (reviewIndex >= reviewQueue.length) {
@@ -2742,6 +2960,13 @@ function nextStep() {
 }
 
 function skipQuestion() {
+  if (isAIMode) {
+    aiStepIndex++;
+    if (aiStepIndex >= aiSteps.length) { showComplete(); return; }
+    renderAIStep();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
   if (isReviewMode) {
     reviewIndex++;
     if (reviewIndex >= reviewQueue.length) { showComplete(); return; }
@@ -2760,11 +2985,34 @@ function showComplete() {
   clearProgress();
   document.getElementById('sum-steps').textContent = sessionData.stepsCompleted;
   document.getElementById('sum-grammar').textContent = sessionData.grammarPatterns.size;
-  document.getElementById('sum-topic').textContent = isReviewMode ? '復習' : currentTopic.label.split('(')[0].trim();
+
+  const aiSummaryEl = document.getElementById('ai-reinforced-summary');
+  const completeAiBtn = document.getElementById('complete-ai-btn');
+
+  if (isAIMode) {
+    document.getElementById('complete-icon').textContent = '🤖';
+    document.getElementById('complete-title').textContent = 'AI強化完了！';
+    document.getElementById('complete-sub').textContent = '弱点パターンを集中トレーニングしました。スコアが統計に反映されます。';
+    document.getElementById('sum-topic').textContent = 'AI強化';
+    aiSummaryEl.style.display = 'block';
+    const tagsEl = document.getElementById('ai-reinforced-tags');
+    tagsEl.innerHTML = [...sessionData.grammarPatterns].map(p => `<div class="ai-reinforced-tag">${p}</div>`).join('');
+    if (completeAiBtn) completeAiBtn.style.display = 'inline-block';
+  } else {
+    document.getElementById('complete-icon').textContent = '🎉';
+    document.getElementById('complete-title').textContent = '1セット完了！';
+    document.getElementById('complete-sub').textContent = '今日のトレーニングお疲れ様でした。\n採点を記録して弱点を把握しましょう。';
+    document.getElementById('sum-topic').textContent = isReviewMode ? '復習' : currentTopic.label.split('(')[0].trim();
+    aiSummaryEl.style.display = 'none';
+    if (completeAiBtn) completeAiBtn.style.display = 'none';
+  }
+
   showScreen('complete-screen');
 }
 
 function restartTraining() {
+  isAIMode = false;
+  isReviewMode = false;
   initStartScreen();
   showScreen('start-screen');
 }
