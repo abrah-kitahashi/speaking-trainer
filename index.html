@@ -2076,7 +2076,7 @@ async function aiScore(userAnswer, step) {
 文法フォーカス: ${step.grammar}
 
 以下のJSON形式のみで回答してください（他のテキスト不要）:
-{"score": 75, "comment": "ここが良かった点と改善点を日本語で2〜3文で。"}
+{"score": 75, "comment": "改善点を日本語20字以内で"}
 
 採点基準（0〜100点）:
 - 意味・内容の正確さ（40点）
@@ -2094,7 +2094,7 @@ async function aiScore(userAnswer, step) {
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 150,
+        max_tokens: 120,
         messages: [{ role: 'user', content: prompt }]
       })
     });
@@ -2584,18 +2584,24 @@ function submitAnswer() {
     aiScore(answer, step).then(result => {
       document.getElementById('ai-score-loading').style.display = 'none';
       document.getElementById('score-main').style.display = 'block';
-      const finalScore = result?.score ?? 70;
-      document.getElementById('score-slider').value = finalScore;
-      document.getElementById('score-display-num').textContent = finalScore;
       if (result?.score !== null && result?.score !== undefined) {
+        document.getElementById('score-slider').value = result.score;
+        document.getElementById('score-display-num').textContent = result.score;
         document.getElementById('ai-score-label').style.display = 'block';
-      }
-      if (result?.comment) {
+        if (result.comment) {
+          const fb = document.getElementById('ai-feedback-box');
+          fb.textContent = result.comment;
+          fb.style.display = 'block';
+        }
+        recordScore();
+      } else {
+        // AI採点失敗 — スライダーをリセットして手動記録を促す
+        document.getElementById('score-slider').value = 70;
+        document.getElementById('score-display-num').textContent = 70;
         const fb = document.getElementById('ai-feedback-box');
-        fb.textContent = result.comment;
+        fb.textContent = '⚠️ AI採点に失敗しました。スライダーで手動採点してください。';
         fb.style.display = 'block';
       }
-      recordScore();
     });
 
     aiSuggestRewrite(answer, step).then(result => {
@@ -2878,13 +2884,29 @@ function setSyncStatus(msg, type) {
   el.style.color = type === 'error' ? '#e87a7a' : 'var(--success)';
 }
 
+function mergeScores(base, remote) {
+  const merged = { ...base };
+  for (const [qid, entries] of Object.entries(remote)) {
+    if (!merged[qid]) { merged[qid] = entries; continue; }
+    const dates = new Set(merged[qid].map(e => e.date));
+    for (const e of entries) {
+      if (!dates.has(e.date)) { merged[qid].push(e); dates.add(e.date); }
+    }
+    merged[qid].sort((a, b) => a.date - b.date);
+  }
+  return merged;
+}
+
 async function pushToCloud() {
   try {
     const userId = getSyncUserId();
-    const scores = getScores();
     const apiKey = getApiKey();
-    const payload = { user_id: userId, scores_json: scores, updated_at: new Date().toISOString() };
-    if (apiKey) payload.api_key = apiKey; // 空の場合はクラウドを上書きしない
+    // 競合防止：push前にクラウドの最新データをfetchしてマージ
+    const { data } = await sb.from('user_sync').select('scores_json').eq('user_id', userId).single();
+    const merged = mergeScores(getScores(), data?.scores_json || {});
+    try { localStorage.setItem('st_scores', JSON.stringify(merged)); } catch(e) {}
+    const payload = { user_id: userId, scores_json: merged, updated_at: new Date().toISOString() };
+    if (apiKey) payload.api_key = apiKey;
     const { error } = await sb.from('user_sync').upsert(payload);
     if (!error) setSyncStatus('クラウドに同期済み ✓', 'ok');
     else setSyncStatus('同期失敗: ' + error.message, 'error');
@@ -2899,22 +2921,11 @@ async function pullFromCloud() {
       await pushToCloud();
       return;
     }
-    // APIキーをスコアマージより先に反映（pushToCloud時に正しいキーが使われるよう）
     if (data.api_key && !getApiKey()) {
       localStorage.setItem('st_api_key', data.api_key);
       updateApiKeyStatus();
     }
-    const remote = data.scores_json || {};
-    const local = getScores();
-    const merged = { ...local };
-    for (const [qid, entries] of Object.entries(remote)) {
-      if (!merged[qid]) { merged[qid] = entries; continue; }
-      const dates = new Set(merged[qid].map(e => e.date));
-      for (const e of entries) {
-        if (!dates.has(e.date)) { merged[qid].push(e); dates.add(e.date); }
-      }
-      merged[qid].sort((a, b) => a.date - b.date);
-    }
+    const merged = mergeScores(getScores(), data.scores_json || {});
     try { localStorage.setItem('st_scores', JSON.stringify(merged)); } catch(e) {}
     initStartScreen();
     await pushToCloud();
@@ -2945,6 +2956,11 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('user-answer').addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitAnswer(); }
   });
+});
+
+// タブ/アプリに戻ったとき自動再同期（デバイス間のズレを解消）
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') pullFromCloud();
 });
 </script>
 </body>
